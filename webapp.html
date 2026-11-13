@@ -207,20 +207,20 @@
 
       <!-- Navigation Tabs -->
       <nav class="flex gap-2 overflow-x-auto no-scrollbar pt-3 pb-1" aria-label="Розділи">
+        <button type="button" data-tab="cabinet" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>👤</span><span>Кабінет</span>
+        </button>
         <button type="button" data-tab="pamyatka" class="tab-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
           <span>📖</span><span>Пам’ятка</span>
         </button>
-        <button type="button" data-tab="reports" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
-          <span>📝</span><span>Рапорти</span>
-        </button>
-        <button type="button" data-tab="instructions" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
-          <span>⚖️</span><span>Інструкції</span>
+        <button type="button" data-tab="guide" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>📚</span><span>Довідник</span>
         </button>
         <button type="button" data-tab="form" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
           <span>📋</span><span>Звернення</span>
         </button>
         <button type="button" data-tab="hotlines" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
-          <span>📞</span><span>Гарячі лінії</span>
+          <span>📞</span><span>Контакти</span>
         </button>
       </nav>
     </div>
@@ -228,6 +228,126 @@
 
   <!-- Main Content -->
   <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4">
+
+    <!-- TAB 0: ОСОБИСТИЙ КАБІНЕТ -->
+    <section id="tab-cabinet" class="tab-panel hidden space-y-4">
+      <div id="cab-status-card" class="glass-card p-4 space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <h2 class="text-base font-extrabold" style="color: #fef3c7;">👤 Особистий кабінет</h2>
+          <button type="button" id="cab-refresh-btn" class="text-xs font-bold px-3 py-1.5 rounded-xl btn-dshv">🔄 Оновити</button>
+        </div>
+        <p id="cab-status-text" class="text-xs" style="color: var(--text-muted);">Підключення до сервера супроводу...</p>
+      </div>
+
+      <div id="cab-content" class="hidden space-y-4">
+        <!-- Stay Status -->
+        <div class="glass-card p-4 space-y-3" style="border-color: rgba(234, 179, 8, 0.25);">
+          <h3 class="text-sm font-bold flex items-center gap-2" style="color: #fde047;">
+            <span>📍</span><span>Де я зараз (статус перебування)</span>
+          </h3>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button type="button" data-stay="🏥 У шпиталі / медзакладі" class="cab-stay-btn p-2.5 rounded-xl font-semibold text-left border" style="background: rgba(255,255,255,0.03); border-color: var(--border-subtle);">🏥 У шпиталі</button>
+            <button type="button" data-stay="🏠 Відпустка для лікування" class="cab-stay-btn p-2.5 rounded-xl font-semibold text-left border" style="background: rgba(255,255,255,0.03); border-color: var(--border-subtle);">🏠 Відпустка</button>
+            <button type="button" data-stay="🩺 Проходжу ВЛК / ЕКОПФО" class="cab-stay-btn p-2.5 rounded-xl font-semibold text-left border" style="background: rgba(255,255,255,0.03); border-color: var(--border-subtle);">🩺 ВЛК / ЕКОПФО</button>
+            <button type="button" data-stay="🪖 Повернувся до частини" class="cab-stay-btn p-2.5 rounded-xl font-semibold text-left border" style="background: rgba(255,255,255,0.03); border-color: var(--border-subtle);">🪖 У частині</button>
+          </div>
+          <div class="flex gap-2">
+            <input id="cab-stay-place" type="text" class="input-field text-xs" placeholder="Медзаклад, місто або уточнення..." />
+            <button type="button" id="cab-save-stay" class="btn-dshv px-4 py-2 rounded-xl text-xs font-bold shrink-0">💾</button>
+          </div>
+        </div>
+
+        <!-- Payment Issue -->
+        <div class="glass-card p-4 space-y-3">
+          <h3 class="text-sm font-bold flex items-center gap-2" style="color: #fde047;">
+            <span>💸</span><span>Не прийшла виплата</span>
+          </h3>
+          <select id="cab-pay-type" class="input-field text-xs">
+            <option value="Грошове забезпечення">💵 Грошове забезпечення</option>
+            <option value="Додаткова винагорода">🎖 Додаткова винагорода (100 тис.)</option>
+            <option value="ОГД / Матеріальна допомога">📄 ОГД / Матеріальна допомога</option>
+          </select>
+          <div class="flex gap-2">
+            <input id="cab-pay-period" type="text" class="input-field text-xs" placeholder="Термін (напр.: за жовтень 2026)" />
+            <button type="button" id="cab-send-pay" class="btn-dshv px-4 py-2 rounded-xl text-xs font-bold shrink-0">📤</button>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <details class="glass-card p-4 space-y-3">
+          <summary class="text-sm font-bold flex items-center justify-between cursor-pointer list-none" style="color: #fde047;">
+            <span>🪪 Мої дані анкети</span>
+            <span class="text-xs font-normal" style="color: var(--text-muted);">розгорнути ▾</span>
+          </summary>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <input id="cab-fullname" type="text" class="input-field text-xs" placeholder="ПІБ повністю" />
+            <input id="cab-callsign" type="text" class="input-field text-xs" placeholder="Позивний" />
+            <input id="cab-unit" type="text" class="input-field text-xs" placeholder="Рота / підрозділ" />
+            <input id="cab-phone" type="tel" class="input-field text-xs" placeholder="Телефон" />
+          </div>
+          <button type="button" id="cab-save-profile" class="btn-dshv w-full py-2.5 rounded-xl text-xs font-bold">💾 Зберегти анкету</button>
+        </details>
+
+        <!-- Synced VLK 120 -->
+        <div class="glass-card p-4 space-y-2.5">
+          <h3 class="text-sm font-bold flex items-center gap-2">
+            <span>⏳</span><span>Мій лічильник ВЛК (120 діб)</span>
+          </h3>
+          <div id="cab-vlk-info" class="text-xs" style="color: var(--text-muted);">Дата ВЛК ще не задана.</div>
+          <div class="flex gap-2">
+            <input id="cab-vlk-date" type="date" class="input-field text-xs py-2" />
+            <button type="button" id="cab-save-vlk" class="btn-gold px-4 py-2 rounded-xl text-xs shrink-0">Оновити</button>
+          </div>
+        </div>
+
+        <!-- Auto Report Draft Generator -->
+        <details class="glass-card p-4 space-y-2.5">
+          <summary class="text-sm font-bold flex items-center justify-between cursor-pointer list-none">
+            <span>📝 Чернетка рапорту (ОГД / МД)</span>
+            <span class="text-xs font-normal" style="color: var(--text-muted);">розгорнути ▾</span>
+          </summary>
+          <div class="flex gap-2">
+            <button type="button" id="cab-gen-ogd" class="btn-dshv flex-1 py-2 rounded-xl text-xs font-bold">Рапорт на ОГД</button>
+            <button type="button" id="cab-gen-md" class="btn-gold flex-1 py-2 rounded-xl text-xs">Рапорт на МД</button>
+          </div>
+          <pre id="cab-report-preview" class="hidden whitespace-pre-wrap text-[11px] p-3 rounded-xl" style="background: rgba(10,12,17,0.85); border: 1px solid var(--border-subtle); color: #e2e8f0;"></pre>
+          <button type="button" id="cab-copy-report" class="hidden w-full py-2 rounded-xl text-xs font-bold" style="background: rgba(255,255,255,0.08);">📋 Скопіювати чернетку</button>
+        </details>
+
+        <!-- My Needs -->
+        <div class="glass-card p-4 space-y-3">
+          <h3 class="text-sm font-bold flex items-center gap-2">
+            <span>📌</span><span>Мої потреби та звернення</span>
+          </h3>
+          <div class="flex gap-2">
+            <input id="cab-new-need" type="text" class="input-field text-xs" placeholder="Коротко опишіть нову потребу..." />
+            <button type="button" id="cab-add-need" class="btn-dshv px-4 py-2 rounded-xl text-xs font-bold shrink-0">➕</button>
+          </div>
+          <div id="cab-needs-list" class="space-y-2 text-xs"></div>
+        </div>
+
+        <!-- My Documents -->
+        <div class="glass-card p-4 space-y-2.5">
+          <h3 class="text-sm font-bold flex items-center gap-2">
+            <span>📁</span><span>Мої документи в архіві</span>
+          </h3>
+          <div id="cab-docs-list" class="space-y-1.5 text-xs"></div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="cab-admin-box" class="hidden glass-card p-4 space-y-3" style="border-color: rgba(234, 179, 8, 0.35);">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-bold" style="color: #fde047;">👮‍♂️ Адмін-панель</h3>
+            <button type="button" id="cab-admin-clear-closed" class="text-[11px] font-bold px-2.5 py-1 rounded-lg" style="background: rgba(220, 38, 38, 0.25); color: #fecaca;">🧹 Очистити вирішені</button>
+          </div>
+          <div id="cab-admin-vlk-wrap" class="hidden space-y-1.5">
+            <div class="text-xs font-bold text-red-400">⚠️ Червоний список ВЛК (≤ 14 діб / прострочено):</div>
+            <div id="cab-admin-vlk" class="space-y-1.5 text-xs"></div>
+          </div>
+          <div id="cab-admin-needs" class="space-y-2 text-xs"></div>
+        </div>
+      </div>
+    </section>
 
     <!-- TAB 1: ПАМ'ЯТКА 3 БАТАЛЬЙОНУ -->
     <section id="tab-pamyatka" class="tab-panel space-y-4">
@@ -333,8 +453,13 @@
       </div>
     </section>
 
-    <!-- TAB 2: РАПОРТИ (ОГД / МД / АРМІЯ+) -->
-    <section id="tab-reports" class="tab-panel hidden space-y-3.5">
+    <!-- TAB 2: ДОВІДНИК (ІНСТРУКЦІЇ + РАПОРТИ) -->
+    <section id="tab-guide" class="tab-panel hidden space-y-3.5">
+      <div class="glass-card p-2 flex gap-2">
+        <button type="button" data-gmode="instr" class="guide-mode-btn flex-1 py-2 rounded-xl text-xs font-bold btn-dshv">⚖️ Інструкції</button>
+        <button type="button" data-gmode="reports" class="guide-mode-btn flex-1 py-2 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.03); color: var(--text-muted);">📝 Рапорти (ОГД/МД)</button>
+      </div>
+      <div id="guide-reports-wrap" class="hidden space-y-3.5">
       <div class="glass-card p-2 flex gap-2">
         <button type="button" data-subtab="ogd" class="report-sub-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-bold btn-dshv">📄 ОГД</button>
         <button type="button" data-subtab="md" class="report-sub-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.03); color: var(--text-muted);">💳 МД</button>
@@ -391,10 +516,8 @@
           <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-3.5 py-2 rounded-xl btn-dshv">🔗 Офіційна інструкція Армія+</a>
         </div>
       </div>
-    </section>
-
-    <!-- TAB 3: ШВИДКІ ІНСТРУКЦІЇ -->
-    <section id="tab-instructions" class="tab-panel hidden space-y-3">
+      </div>
+      <div id="guide-instr-wrap" class="space-y-3">
       <div class="glass-card p-3">
         <input id="instr-search" type="search" class="input-field text-sm" placeholder="🔍 Пошук: Довідка №5, ВЛК, ЕКОПФО, виплати..." />
       </div>
@@ -437,6 +560,7 @@
             <li><strong class="text-slate-200">Додаткова винагорода (до 100 000 грн/міс. пропорційно дням):</strong> виплачується за час стаціонарного лікування (зокрема за кордоном) та відпустки для лікування після тяжкого поранення при захисті Батьківщини — на підставі Довідки № 5 та медвиписок.</li>
           </ul>
         </article>
+      </div>
       </div>
     </section>
 
@@ -633,6 +757,24 @@
         });
       });
 
+
+      document.querySelectorAll('.guide-mode-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          haptic();
+          const mode = btn.getAttribute('data-gmode');
+          document.querySelectorAll('.guide-mode-btn').forEach((b) => {
+            b.classList.remove('btn-dshv', 'font-bold');
+            b.style.background = 'rgba(255,255,255,0.03)';
+            b.style.color = 'var(--text-muted)';
+          });
+          btn.classList.add('btn-dshv', 'font-bold');
+          btn.style.background = '';
+          btn.style.color = '';
+          document.getElementById('guide-instr-wrap').classList.toggle('hidden', mode !== 'instr');
+          document.getElementById('guide-reports-wrap').classList.toggle('hidden', mode !== 'reports');
+        });
+      });
+
       // Reports Sub-tabs
       const subBtns = document.querySelectorAll('.report-sub-btn');
       const reportCards = document.querySelectorAll('.report-card');
@@ -807,6 +949,318 @@
 
       document.getElementById('copy-appeal-btn').addEventListener('click', () => {
         copyText(document.getElementById('form-preview-text').textContent);
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramApi = (urlParams.get('api') || '').trim();
+      if (paramApi) {
+        try { localStorage.setItem('suprovid_api_url', paramApi); } catch (e) {}
+      }
+      function getApiBase() {
+        if (paramApi) return paramApi.replace(/\/+$/, '');
+        try { return (localStorage.getItem('suprovid_api_url') || '').replace(/\/+$/, ''); } catch (e) { return ''; }
+      }
+      let selectedStayStatus = '';
+
+      function highlightStayBtns() {
+        document.querySelectorAll('.cab-stay-btn').forEach((btn) => {
+          const active = btn.getAttribute('data-stay') === selectedStayStatus;
+          btn.style.background = active ? 'rgba(153, 27, 27, 0.55)' : 'rgba(255,255,255,0.03)';
+          btn.style.borderColor = active ? 'rgba(234, 179, 8, 0.65)' : 'var(--border-subtle)';
+          btn.style.color = active ? '#fef3c7' : 'var(--text-main)';
+        });
+      }
+
+      document.querySelectorAll('.cab-stay-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          haptic();
+          selectedStayStatus = btn.getAttribute('data-stay');
+          highlightStayBtns();
+        });
+      });
+
+      async function apiReq(path, method, body) {
+        const base = getApiBase();
+        if (!base) throw new Error('API URL не налаштовано');
+        const initData = (tg && tg.initData) ? tg.initData : '';
+        if (!initData) throw new Error('Відкрийте міні-додаток саме через кнопку в Telegram-боті');
+        const res = await fetch(base + path, {
+          method: method || 'GET',
+          headers: { 'Content-Type': 'application/json', 'X-Tg-Init-Data': initData },
+          body: body ? JSON.stringify(body) : undefined
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Помилка сервера');
+        return data;
+      }
+
+      async function loadCabinet() {
+        const stEl = document.getElementById('cab-status-text');
+        const boxEl = document.getElementById('cab-content');
+        try {
+          stEl.textContent = 'Завантаження ваших даних...';
+          stEl.style.color = 'var(--text-muted)';
+          const d = await apiReq('/api/me', 'GET');
+          stEl.textContent = d.is_admin ? '✅ Авторизовано (Адміністратор)' : '✅ Авторизовано у вашому кабінеті';
+          stEl.style.color = '#4ade80';
+          boxEl.classList.remove('hidden');
+
+          const p = d.profile || {};
+          document.getElementById('cab-fullname').value = p.full_name || p.name || '';
+          document.getElementById('cab-callsign').value = p.callsign || '';
+          document.getElementById('cab-unit').value = p.unit || '';
+          document.getElementById('cab-phone').value = p.phone || '';
+          selectedStayStatus = p.stay_status || '';
+          document.getElementById('cab-stay-place').value = p.stay_place || '';
+          highlightStayBtns();
+
+          const vlkInfo = document.getElementById('cab-vlk-info');
+          if (d.vlk) {
+            document.getElementById('cab-vlk-date').value = d.vlk.date;
+            vlkInfo.textContent = 'Минуло ' + d.vlk.elapsed + ' / 120 діб · Залишилося: ' + d.vlk.left + ' діб (120-та доба: ' + d.vlk.due + ')';
+            vlkInfo.style.color = d.vlk.left <= 14 ? '#fde047' : '#4ade80';
+          } else {
+            vlkInfo.textContent = 'Дата постанови ВЛК ще не задана. Оберіть дату нижче, щоб увімкнути контроль 120 діб.';
+            vlkInfo.style.color = 'var(--text-muted)';
+          }
+
+          const needsEl = document.getElementById('cab-needs-list');
+          needsEl.innerHTML = '';
+          if (!d.needs || !d.needs.length) {
+            needsEl.innerHTML = '<div style="color: var(--text-muted);">У вас поки немає зареєстрованих потреб.</div>';
+          } else {
+            d.needs.forEach((n) => {
+              const row = document.createElement('div');
+              row.className = 'p-2.5 rounded-xl';
+              row.style.background = 'rgba(255,255,255,0.03)';
+              row.style.border = '1px solid var(--border-subtle)';
+              row.textContent = (n.closed ? '✅' : '🟠') + ' #' + n.id + ' · ' + (n.text || '');
+              needsEl.appendChild(row);
+            });
+          }
+
+          const docsEl = document.getElementById('cab-docs-list');
+          docsEl.innerHTML = '';
+          if (!d.documents || !d.documents.length) {
+            docsEl.innerHTML = '<div style="color: var(--text-muted);">Файлів ще немає. Завантажуйте документи в чаті бота («📁 Документи»).</div>';
+          } else {
+            const base = getApiBase();
+            const initQ = encodeURIComponent((tg && tg.initData) ? tg.initData : '');
+            d.documents.forEach((doc) => {
+              const row = document.createElement('div');
+              row.className = 'p-2.5 rounded-xl flex items-center justify-between gap-2';
+              row.style.background = 'rgba(255,255,255,0.03)';
+              row.style.border = '1px solid var(--border-subtle)';
+              const kb = Math.max(1, Math.round((doc.size || 0) / 1024));
+              const nameSpan = document.createElement('span');
+              nameSpan.className = 'truncate';
+              nameSpan.textContent = '📄 ' + doc.name + ' (' + kb + ' КБ)';
+              const link = document.createElement('a');
+              link.href = base + '/api/doc?id=' + doc.id + '&initData=' + initQ;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              link.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px] shrink-0 btn-gold';
+              link.textContent = '⬇️ Відкрити';
+              row.appendChild(nameSpan);
+              row.appendChild(link);
+              docsEl.appendChild(row);
+            });
+          }
+
+          const admBox = document.getElementById('cab-admin-box');
+          const admList = document.getElementById('cab-admin-needs');
+          const vlkWrap = document.getElementById('cab-admin-vlk-wrap');
+          const vlkAlertsEl = document.getElementById('cab-admin-vlk');
+          if (d.is_admin) {
+            admBox.classList.remove('hidden');
+            const alerts = d.admin_vlk_alerts || [];
+            if (alerts.length) {
+              vlkWrap.classList.remove('hidden');
+              vlkAlertsEl.innerHTML = '';
+              alerts.forEach((a) => {
+                const ar = document.createElement('div');
+                ar.className = 'p-2 rounded-xl';
+                ar.style.background = 'rgba(220,38,38,0.14)';
+                ar.style.border = '1px solid rgba(248,113,113,0.3)';
+                ar.textContent = (a.left <= 0 ? '🚨 ' : '⏳ ') + a.label + ' — ' + (a.left <= 0 ? 'прострочено на ' + Math.abs(a.left) + ' дн.' : 'залишилося ' + a.left + ' дн.') + ' (120-та: ' + a.due + ')';
+                vlkAlertsEl.appendChild(ar);
+              });
+            } else {
+              vlkWrap.classList.add('hidden');
+            }
+
+            admList.innerHTML = '';
+            (d.admin_needs || []).forEach((n) => {
+              const card = document.createElement('div');
+              card.className = 'p-3 rounded-xl space-y-2';
+              card.style.background = 'rgba(10,12,17,0.75)';
+              card.style.border = '1px solid var(--border-subtle)';
+              const hdr = document.createElement('div');
+              hdr.className = 'font-bold text-slate-200';
+              hdr.textContent = (n.closed ? '✅ ' : '🟠 ') + '#' + n.id + ' · ' + (n.label || n.uid) + (n.stay_status ? ' · ' + n.stay_status : '');
+              const txt = document.createElement('div');
+              txt.style.color = 'var(--text-muted)';
+              txt.textContent = n.text;
+              const acts = document.createElement('div');
+              acts.className = 'flex flex-wrap gap-2';
+              if (!n.closed) {
+                const bClose = document.createElement('button');
+                bClose.type = 'button';
+                bClose.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+                bClose.style.background = 'rgba(22,163,74,0.25)';
+                bClose.style.color = '#86efac';
+                bClose.textContent = '✅ Вирішено';
+                bClose.onclick = async () => { await apiReq('/api/admin/need', 'POST', {action: 'close', id: n.id}); loadCabinet(); };
+                acts.appendChild(bClose);
+              }
+              const bReply = document.createElement('button');
+              bReply.type = 'button';
+              bReply.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+              bReply.style.background = 'rgba(37,99,235,0.28)';
+              bReply.style.color = '#bfdbfe';
+              bReply.textContent = '💬 Відповісти';
+              bReply.onclick = () => {
+                let box = card.querySelector('.adm-reply-box');
+                if (box) { box.classList.toggle('hidden'); return; }
+                box = document.createElement('div');
+                box.className = 'adm-reply-box flex gap-2 pt-1';
+                const rInp = document.createElement('input');
+                rInp.type = 'text';
+                rInp.className = 'input-field text-xs py-1.5';
+                rInp.placeholder = 'Відповідь для ' + (n.label || n.uid) + '...';
+                const rSend = document.createElement('button');
+                rSend.type = 'button';
+                rSend.className = 'btn-dshv px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0';
+                rSend.textContent = 'Надіслати';
+                rSend.onclick = async () => {
+                  const msg = rInp.value.trim();
+                  if (!msg) return;
+                  await apiReq('/api/admin/reply', 'POST', {target_uid: n.uid, text: msg});
+                  rInp.value = '';
+                  box.classList.add('hidden');
+                  showToast('Надіслано в Telegram!');
+                };
+                box.appendChild(rInp);
+                box.appendChild(rSend);
+                card.appendChild(box);
+              };
+              acts.appendChild(bReply);
+              const bDel = document.createElement('button');
+              bDel.type = 'button';
+              bDel.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+              bDel.style.background = 'rgba(220,38,38,0.25)';
+              bDel.style.color = '#fecaca';
+              bDel.textContent = '🗑 Видалити';
+              bDel.onclick = async () => { await apiReq('/api/admin/need', 'POST', {action: 'delete', id: n.id}); loadCabinet(); };
+              acts.appendChild(bDel);
+              card.appendChild(hdr);
+              card.appendChild(txt);
+              card.appendChild(acts);
+              admList.appendChild(card);
+            });
+          } else {
+            admBox.classList.add('hidden');
+          }
+        } catch (err) {
+          boxEl.classList.add('hidden');
+          stEl.textContent = 'ℹ️ ' + (err && err.message ? err.message : 'Немає зв’язку з сервером');
+          stEl.style.color = '#fde047';
+        }
+      }
+
+      function buildReportDraft(kind) {
+        const fn = document.getElementById('cab-fullname').value.trim() || '[ПІБ]';
+        const un = document.getElementById('cab-unit').value.trim() || '[Підрозділ]';
+        const ph = document.getElementById('cab-phone').value.trim() || '[Телефон]';
+        const txt = kind === 'ogd'
+          ? `Командиру військової частини А4350
+
+РАПОРТ
+Прошу розглянути питання щодо призначення та виплати мені, ${fn} (${un}, тел. ${ph}), одноразової грошової допомоги у зв’язку з ушкодженням здоров’я під час захисту Батьківщини.
+
+Додатки: копії паспорта, РНОКПП, Довідки № 5, постанови ВЛК, витягу ЕКОПФО, довідки IBAN.
+
+Дата: ${new Date().toLocaleDateString('uk-UA')}`
+          : `Командиру військової частини А4350
+
+РАПОРТ
+Прошу виплатити мені, ${fn} (${un}, тел. ${ph}), матеріальну допомогу на вирішення соціально-побутових питань у зв’язку з пораненням / лікуванням.
+
+Додатки: копії медичних документів / виписок.
+
+Дата: ${new Date().toLocaleDateString('uk-UA')}`;
+        const pre = document.getElementById('cab-report-preview');
+        const cpy = document.getElementById('cab-copy-report');
+        pre.textContent = txt;
+        pre.classList.remove('hidden');
+        cpy.classList.remove('hidden');
+      }
+
+      document.getElementById('cab-gen-ogd').addEventListener('click', () => { haptic(); buildReportDraft('ogd'); });
+      document.getElementById('cab-gen-md').addEventListener('click', () => { haptic(); buildReportDraft('md'); });
+      document.getElementById('cab-copy-report').addEventListener('click', () => { copyText(document.getElementById('cab-report-preview').textContent); });
+      document.getElementById('cab-refresh-btn').addEventListener('click', () => { haptic(); loadCabinet(); });
+      document.querySelector('[data-tab="cabinet"]').addEventListener('click', () => { loadCabinet(); });
+      document.getElementById('cab-save-stay').addEventListener('click', async () => {
+        haptic();
+        if (!selectedStayStatus) return showToast('Оберіть статус вище', true);
+        try {
+          await apiReq('/api/stay', 'POST', {stay_status: selectedStayStatus, stay_place: document.getElementById('cab-stay-place').value.trim()});
+          showToast('Статус перебування збережено!');
+        } catch (e) { showToast(e.message, true); }
+      });
+      document.getElementById('cab-send-pay').addEventListener('click', async () => {
+        haptic();
+        const period = document.getElementById('cab-pay-period').value.trim();
+        if (!period) return showToast('Вкажіть термін (період)', true);
+        try {
+          await apiReq('/api/payment_issue', 'POST', {pay_type: document.getElementById('cab-pay-type').value, period});
+          document.getElementById('cab-pay-period').value = '';
+          showToast('Заявку щодо виплати надіслано!');
+          loadCabinet();
+        } catch (e) { showToast(e.message, true); }
+      });
+      document.getElementById('cab-save-profile').addEventListener('click', async () => {
+        haptic();
+        try {
+          await apiReq('/api/profile', 'POST', {
+            full_name: document.getElementById('cab-fullname').value,
+            callsign: document.getElementById('cab-callsign').value,
+            unit: document.getElementById('cab-unit').value,
+            phone: document.getElementById('cab-phone').value
+          });
+          showToast('Анкету збережено!');
+        } catch (e) { showToast(e.message, true); }
+      });
+      document.getElementById('cab-save-vlk').addEventListener('click', async () => {
+        haptic();
+        const v = document.getElementById('cab-vlk-date').value;
+        if (!v) return showToast('Оберіть дату', true);
+        try {
+          await apiReq('/api/vlk', 'POST', {vlk_date: v});
+          showToast('Дату ВЛК оновлено!');
+          loadCabinet();
+        } catch (e) { showToast(e.message, true); }
+      });
+      document.getElementById('cab-add-need').addEventListener('click', async () => {
+        haptic();
+        const inp = document.getElementById('cab-new-need');
+        const txt = inp.value.trim();
+        if (!txt) return showToast('Введіть текст потреби', true);
+        try {
+          await apiReq('/api/need', 'POST', {text: txt});
+          inp.value = '';
+          showToast('Потребу надіслано!');
+          loadCabinet();
+        } catch (e) { showToast(e.message, true); }
+      });
+      document.getElementById('cab-admin-clear-closed').addEventListener('click', async () => {
+        haptic();
+        try {
+          await apiReq('/api/admin/need', 'POST', {action: 'clear_closed'});
+          showToast('Вирішені потреби очищено!');
+          loadCabinet();
+        } catch (e) { showToast(e.message, true); }
       });
     })();
   </script>
