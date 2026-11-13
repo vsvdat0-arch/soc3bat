@@ -158,9 +158,16 @@
             <div class="font-semibold text-blue-400">2. Довідка про обставини поранення (Довідка № 5)</div>
             <p class="mt-1" style="color: var(--text-hint);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП). Без неї неможливі правильний висновок ВЛК та оформлення ОГД.</p>
           </div>
-          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
-            <div class="font-semibold text-blue-400">3. Контроль 120 діб лікування</div>
-            <p class="mt-1" style="color: var(--text-hint);">Якщо безперервне лікування триває понад 120 діб — обов’язково пройдіть ВЛК для продовження лікування або визначення придатності.</p>
+          <div class="p-3 rounded-xl space-y-2" style="background-color: var(--bg-primary);">
+            <div class="font-semibold text-blue-400">3. Контроль 120 діб лікування (ВЛК)</div>
+            <p style="color: var(--text-hint);">Безперервне лікування (включно з відпусткою для лікування) може тривати до 120 діб поспіль, після чого потрібно пройти ВЛК. <strong>Після проходження чергової ВЛК та нової постанови про продовження лікування лічильник обнуляється</strong> і відлік 120 діб починається заново від дати нової постанови (автоконтроль і сповіщення є в боті у кнопці «⏳ ВЛК (120 діб)»).</p>
+            <div class="pt-1 border-t" style="border-color: var(--card-border);">
+              <label for="vlk-date-input" class="block text-xs font-semibold mb-1">⏳ Калькулятор 120 діб (дата постанови ВЛК / початку лікування):</label>
+              <div class="flex gap-2 items-center">
+                <input id="vlk-date-input" type="date" class="input-field text-xs py-2" />
+              </div>
+              <div id="vlk-calc-result" class="text-xs mt-2 font-medium" style="color: var(--text-hint);">Оберіть дату, щоб розрахувати залишок днів до ВЛК.</div>
+            </div>
           </div>
           <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
             <div class="font-semibold text-blue-400">4. Зберігайте копії всіх документів</div>
@@ -261,7 +268,7 @@
           <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
             <li>Отримайте направлення на ВЛК (від командира, начальника медпункту або лікуючого лікаря).</li>
             <li>Підготуйте військовий квиток/посвідчення, виписки з лікарень, обстеження та Довідку № 5.</li>
-            <li>Отримайте постанову ВЛК та перевірте причинний зв’язок.</li>
+            <li>Отримайте постанову ВЛК та перевірте причинний зв’язок. Якщо лікування триває далі — відлік 120 діб обнуляється від дати нової постанови ВЛК.</li>
           </ol>
           <p class="text-xs pt-1" style="color: #60a5fa;">🌍 Лікування за кордоном: можливе дистанційне ВЛК за медичними документами.</p>
         </article>
@@ -535,6 +542,38 @@
         document.getElementById('checklist-progress').textContent = done + ' / ' + checklistData.length;
       }
       renderChecklist();
+
+      // 120-day VLK Calculator
+      const vlkInput = document.getElementById('vlk-date-input');
+      const vlkResult = document.getElementById('vlk-calc-result');
+      function updateVlkCalc() {
+        if (!vlkInput || !vlkInput.value) return;
+        try { localStorage.setItem('suprovid_vlk_date_v1', vlkInput.value); } catch (e) {}
+        const start = new Date(vlkInput.value + 'T00:00:00');
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const elapsed = Math.max(0, Math.floor((today - start) / 86400000));
+        const left = 120 - elapsed;
+        const due = new Date(start.getTime() + 120 * 86400000);
+        const dueStr = due.toLocaleDateString('uk-UA');
+        if (left > 0) {
+          vlkResult.style.color = left <= 14 ? '#facc15' : '#4ade80';
+          vlkResult.textContent = 'Минуло: ' + elapsed + ' діб · Залишилося: ' + left + ' діб (120-та доба: ' + dueStr + ')';
+        } else if (left === 0) {
+          vlkResult.style.color = '#f87171';
+          vlkResult.textContent = '⚠️ Сьогодні 120-та доба (' + dueStr + ')! Потрібно пройти ВЛК.';
+        } else {
+          vlkResult.style.color = '#f87171';
+          vlkResult.textContent = '🚨 Термін 120 діб перевищено на ' + Math.abs(left) + ' діб (була ' + dueStr + '). Пройдіть ВЛК та обнуліть відлік.';
+        }
+      }
+      if (vlkInput) {
+        try {
+          const savedVlk = localStorage.getItem('suprovid_vlk_date_v1');
+          if (savedVlk) { vlkInput.value = savedVlk; updateVlkCalc(); }
+        } catch (e) {}
+        vlkInput.addEventListener('change', updateVlkCalc);
+      }
 
       // Instructions Search
       const searchInput = document.getElementById('instr-search');
