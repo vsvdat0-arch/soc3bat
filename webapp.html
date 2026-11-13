@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Супровід · 3 батальйон (46 ОАеМБр)</title>
+  <title>Служба супроводу · 3 БАТ (46 ОАеМБр)</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,87 +11,197 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-primary: var(--tg-theme-bg-color, #0f172a);
-      --bg-secondary: var(--tg-theme-secondary-bg-color, #1e293b);
-      --text-primary: var(--tg-theme-text-color, #f8fafc);
-      --text-hint: var(--tg-theme-hint-color, #94a3b8);
-      --accent: var(--tg-theme-button-color, #2563eb);
-      --accent-text: var(--tg-theme-button-text-color, #ffffff);
-      --card-border: rgba(148, 163, 184, 0.18);
+      --bg-base: #0a0c11;
+      --bg-surface: #131722;
+      --bg-elevated: #1a2030;
+      --maroon: #7f1d1d;
+      --maroon-bright: #991b1b;
+      --gold: #eab308;
+      --gold-soft: rgba(234, 179, 8, 0.16);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(234, 179, 8, 0.28);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
     }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
+      background-color: var(--bg-base);
+      background-image:
+        radial-gradient(ellipse 80% 40% at 50% -10%, rgba(127, 29, 29, 0.35), transparent 70%),
+        radial-gradient(ellipse 60% 30% at 90% 100%, rgba(234, 179, 8, 0.08), transparent 70%);
+      background-attachment: fixed;
+      color: var(--text-main);
       margin: 0;
       padding: 0;
       min-height: 100vh;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+
     .glass-card {
-      background-color: var(--bg-secondary);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(22, 27, 39, 0.92) 0%, rgba(16, 20, 30, 0.94) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.22s ease;
     }
+
+    .glass-card:hover {
+      border-color: rgba(234, 179, 8, 0.22);
+    }
+
+    .emblem-ring {
+      box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.45), 0 6px 20px rgba(127, 29, 29, 0.55);
+    }
+
     .tab-btn {
-      transition: all 0.18s ease;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
       white-space: nowrap;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
     }
+
+    .tab-btn:active {
+      transform: scale(0.95);
+    }
+
     .tab-btn.active {
-      background-color: var(--accent);
-      color: var(--accent-text);
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+      background: linear-gradient(135deg, #881337 0%, #7f1d1d 55%, #991b1b 100%);
+      color: #fef3c7;
+      border-color: rgba(234, 179, 8, 0.5);
+      box-shadow: 0 4px 16px rgba(153, 27, 27, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
-    .tab-btn:not(.active) {
-      background-color: var(--bg-secondary);
-      color: var(--text-hint);
-      border: 1px solid var(--card-border);
+
+    .btn-dshv {
+      background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+      color: #fef3c7;
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      box-shadow: 0 4px 16px rgba(127, 29, 29, 0.4);
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .btn-primary {
-      background-color: var(--accent);
-      color: var(--accent-text);
+
+    .btn-dshv:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 6px 22px rgba(153, 27, 27, 0.55);
     }
+
+    .btn-dshv:active {
+      transform: scale(0.97);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+      color: #0f172a;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(234, 179, 8, 0.28);
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .btn-gold:active {
+      transform: scale(0.97);
+    }
+
     .input-field {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      border: 1px solid var(--card-border);
+      background-color: rgba(10, 12, 17, 0.85);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       padding: 11px 14px;
       width: 100%;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
+
     .input-field:focus {
-      border-color: var(--accent);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.14);
     }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .fade-in { animation: fadeIn 0.2s ease-out; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .tab-panel {
+      animation: panelEnter 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes panelEnter {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: rgba(234, 179, 8, 0.16);
+      border: 1px solid rgba(234, 179, 8, 0.35);
+      color: #fde047;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .progress-track {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
     }
   </style>
 </head>
 <body class="pb-24">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-30 backdrop-blur-md border-b" style="background-color: rgba(15, 23, 42, 0.88); border-color: var(--card-border);">
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-30 border-b backdrop-blur-xl" style="background: rgba(10, 12, 17, 0.86); border-color: rgba(234, 179, 8, 0.16);">
     <div class="max-w-2xl mx-auto px-4 pt-3 pb-2.5">
       <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg font-bold shrink-0" style="background: linear-gradient(135deg, #1d4ed8, #0f766e); color: #fff;">
-            🛡️
-          </div>
+        <div class="flex items-center gap-3 min-w-0">
+          <img
+            src="data:image/jpeg;base64,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"
+            alt="Емблема Супровід 3 БАТ"
+            class="w-11 h-11 rounded-2xl object-cover shrink-0 emblem-ring"
+          />
           <div class="min-w-0">
-            <h1 class="text-sm sm:text-base font-bold leading-tight truncate">Служба супроводу · 3 батальйон</h1>
-            <p class="text-xs truncate" style="color: var(--text-hint);">46 ОАеМБр · Пам’ятка, рапорти, інструкції</p>
+            <div class="flex items-center gap-2">
+              <h1 class="text-sm sm:text-base font-extrabold tracking-tight truncate" style="color: #fef3c7;">
+                СУПРОВІД · 3 БАТАЛЬЙОН
+              </h1>
+            </div>
+            <p class="text-[11px] sm:text-xs font-medium truncate" style="color: var(--text-muted);">
+              46 ОАеМБр · ДШВ ЗС України
+            </p>
           </div>
         </div>
-        <span id="tg-badge" class="text-[11px] font-semibold px-2.5 py-1 rounded-full shrink-0" style="background-color: rgba(34, 197, 94, 0.15); color: #4ade80;">
-          Онлайн
+        <span id="tg-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full shrink-0 border" style="background: rgba(127, 29, 29, 0.35); border-color: rgba(234, 179, 8, 0.35); color: #fde047;">
+          На зв’язку
         </span>
       </div>
 
@@ -120,58 +230,92 @@
   <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4">
 
     <!-- TAB 1: ПАМ'ЯТКА 3 БАТАЛЬЙОНУ -->
-    <section id="tab-pamyatka" class="tab-panel fade-in space-y-3.5">
-      <div class="glass-card p-4 border-l-4" style="border-left-color: #eab308;">
-        <div class="flex items-start justify-between gap-2">
-          <div>
-            <h2 class="text-base font-bold">📖 Пам’ятка пораненого / військовослужбовця</h2>
-            <p class="text-xs mt-0.5" style="color: var(--text-hint);">3 батальйон · 46 окрема аеромобільна бригада</p>
+    <section id="tab-pamyatka" class="tab-panel space-y-4">
+      <!-- Hero Banner -->
+      <div class="glass-card p-4 relative overflow-hidden" style="border-color: rgba(234, 179, 8, 0.3); background: linear-gradient(135deg, rgba(127, 29, 29, 0.38) 0%, rgba(19, 23, 34, 0.96) 65%);">
+        <div class="flex items-center gap-3.5">
+          <img
+            src="data:image/jpeg;base64,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"
+            alt="Шеврон 3 БАТ"
+            class="w-16 h-16 rounded-2xl object-cover shrink-0 emblem-ring"
+          />
+          <div class="min-w-0">
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mb-1" style="background: rgba(234, 179, 8, 0.2); color: #fde047;">
+              Пам’ятка військовослужбовця
+            </span>
+            <h2 class="text-base sm:text-lg font-extrabold leading-snug">Соціальний супровід поранених і родин</h2>
+            <p class="text-xs mt-0.5" style="color: var(--text-muted);">Ключові правила для збереження виплат, ВЛК та ОГД</p>
           </div>
-          <span class="text-xs font-semibold px-2 py-1 rounded-lg" style="background-color: rgba(234, 179, 8, 0.16); color: #facc15;">Важливо</span>
         </div>
       </div>
 
       <!-- Critical Check: Wording -->
       <div class="glass-card p-4 space-y-2.5">
-        <h3 class="text-sm font-bold flex items-center gap-2">
+        <h3 class="text-sm font-bold flex items-center gap-2" style="color: #fde047;">
           <span>⚠️</span><span>Критична перевірка формулювання у ВЛК та документах</span>
         </h3>
-        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background-color: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3);">
+        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background: rgba(22, 163, 74, 0.12); border: 1px solid rgba(34, 197, 94, 0.32);">
           <div class="font-bold text-green-400">✅ ПРАВИЛЬНО:</div>
-          <div class="mt-0.5">«ТАК, пов’язане із захистом Батьківщини»</div>
+          <div class="mt-0.5 font-medium">«ТАК, пов’язане із захистом Батьківщини»</div>
         </div>
-        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background-color: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3);">
-          <div class="font-bold text-red-400">❌ ПОМИЛКА (вимагайте виправлення!):</div>
-          <div class="mt-0.5">«пов’язане з проходженням військової служби» — позбавляє бойових виплат та ОГД!</div>
+        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background: rgba(220, 38, 38, 0.14); border: 1px solid rgba(248, 113, 113, 0.35);">
+          <div class="font-bold text-red-400">❌ ПОМИЛКА (одразу вимагайте виправлення!):</div>
+          <div class="mt-0.5" style="color: #fecaca;">«пов’язане з проходженням військової служби» — позбавляє бойових виплат та ОГД!</div>
         </div>
       </div>
 
-      <!-- Key Rules -->
-      <div class="glass-card p-4 space-y-3 text-sm">
-        <h3 class="font-bold text-sm">📌 5 обов’язкових правил супроводу</h3>
+      <!-- 120-Day VLK Calculator -->
+      <div class="glass-card p-4 space-y-3" style="border-color: rgba(234, 179, 8, 0.24);">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <h3 class="text-sm font-bold flex items-center gap-2">
+              <span>⏳</span><span>Контроль 120 діб до чергової ВЛК</span>
+            </h3>
+            <p class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">
+              Безперервне лікування (вкл. відпустку для лікування) триває до 120 діб без ВЛК. <strong class="text-amber-300">Після нової постанови ВЛК лічильник обнуляється</strong> і відлік 120 діб починається заново від дати постанови.
+            </p>
+          </div>
+        </div>
+        <div class="p-3 rounded-xl space-y-2.5" style="background: rgba(10, 12, 17, 0.7); border: 1px solid var(--border-subtle);">
+          <label for="vlk-date-input" class="block text-xs font-semibold" style="color: #fde047;">
+            Дата останньої постанови ВЛК або початку лікування:
+          </label>
+          <input id="vlk-date-input" type="date" class="input-field text-xs sm:text-sm py-2.5" />
+          <div class="progress-track">
+            <div id="vlk-progress-bar" class="progress-fill" style="width: 0%; background: #22c55e;"></div>
+          </div>
+          <div id="vlk-calc-result" class="text-xs font-semibold" style="color: var(--text-muted);">
+            Оберіть дату, щоб побачити залишок днів та дату 120-ї доби.
+          </div>
+        </div>
+      </div>
+
+      <!-- Rules -->
+      <div class="glass-card p-4 space-y-3">
+        <h3 class="text-sm font-bold flex items-center gap-2">
+          <span>📌</span><span>Обов’язкові кроки супроводу</span>
+        </h3>
         <div class="space-y-2.5 text-xs sm:text-sm leading-relaxed">
-          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
-            <div class="font-semibold text-blue-400">1. Довідки про перебування в медзакладі</div>
-            <p class="mt-1" style="color: var(--text-hint);">Отримуйте та передавайте в частину: одразу при госпіталізації, наприкінці кожного місяця, а також при кожному переміщенні, евакуації, виписці чи переході на реабілітацію.</p>
-          </div>
-          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
-            <div class="font-semibold text-blue-400">2. Довідка про обставини поранення (Довідка № 5)</div>
-            <p class="mt-1" style="color: var(--text-hint);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП). Без неї неможливі правильний висновок ВЛК та оформлення ОГД.</p>
-          </div>
-          <div class="p-3 rounded-xl space-y-2" style="background-color: var(--bg-primary);">
-            <div class="font-semibold text-blue-400">3. Контроль 120 діб лікування (ВЛК)</div>
-            <p style="color: var(--text-hint);">Безперервне лікування (включно з відпусткою для лікування) може тривати до 120 діб поспіль, після чого потрібно пройти ВЛК. <strong>Після проходження чергової ВЛК та нової постанови про продовження лікування лічильник обнуляється</strong> і відлік 120 діб починається заново від дати нової постанови (автоконтроль і сповіщення є в боті у кнопці «⏳ ВЛК (120 діб)»).</p>
-            <div class="pt-1 border-t" style="border-color: var(--card-border);">
-              <label for="vlk-date-input" class="block text-xs font-semibold mb-1">⏳ Калькулятор 120 діб (дата постанови ВЛК / початку лікування):</label>
-              <div class="flex gap-2 items-center">
-                <input id="vlk-date-input" type="date" class="input-field text-xs py-2" />
-              </div>
-              <div id="vlk-calc-result" class="text-xs mt-2 font-medium" style="color: var(--text-hint);">Оберіть дату, щоб розрахувати залишок днів до ВЛК.</div>
+          <div class="flex gap-3 p-3 rounded-xl" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
+            <span class="step-badge">1</span>
+            <div>
+              <div class="font-semibold text-slate-100">Довідки про перебування в медзакладі</div>
+              <p class="mt-0.5 text-xs" style="color: var(--text-muted);">Передавайте в частину одразу при госпіталізації, наприкінці кожного місяця та при переміщенні, евакуації, виписці чи реабілітації.</p>
             </div>
           </div>
-          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
-            <div class="font-semibold text-blue-400">4. Зберігайте копії всіх документів</div>
-            <p class="mt-1" style="color: var(--text-hint);">Форма 100, виписки з лікарень, рапорти, направлення — фотографуйте або скануйте у хорошій якості та завантажуйте в розділ «📁 Документи» в боті.</p>
+          <div class="flex gap-3 p-3 rounded-xl" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
+            <span class="step-badge">2</span>
+            <div>
+              <div class="font-semibold text-slate-100">Довідка про обставини поранення (Довідка № 5)</div>
+              <p class="mt-0.5 text-xs" style="color: var(--text-muted);">Виготовляє військова частина у PDF з електронним підписом (КЕП). Без неї неможливі правильний висновок ВЛК та ОГД.</p>
+            </div>
+          </div>
+          <div class="flex gap-3 p-3 rounded-xl" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
+            <span class="step-badge">3</span>
+            <div>
+              <div class="font-semibold text-slate-100">Архів усіх документів</div>
+              <p class="mt-0.5 text-xs" style="color: var(--text-muted);">Форма 100, виписки, рапорти, направлення — фотографуйте чітко й завантажуйте в розділ «📁 Документи» в боті.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -180,60 +324,63 @@
       <div class="glass-card p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-bold">✅ Мій чекліст документів</h3>
-          <span id="checklist-progress" class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color: rgba(37, 99, 235, 0.2); color: #60a5fa;">0 / 5</span>
+          <span id="checklist-progress" class="text-xs font-bold px-2.5 py-0.5 rounded-full" style="background: rgba(234, 179, 8, 0.16); color: #fde047;">0 / 5</span>
+        </div>
+        <div class="progress-track">
+          <div id="checklist-bar" class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #991b1b, #eab308);"></div>
         </div>
         <div id="checklist-items" class="space-y-2"></div>
       </div>
     </section>
 
     <!-- TAB 2: РАПОРТИ (ОГД / МД / АРМІЯ+) -->
-    <section id="tab-reports" class="tab-panel hidden fade-in space-y-3.5">
-      <div class="glass-card p-3 flex gap-2">
-        <button type="button" data-subtab="ogd" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold btn-primary">📄 ОГД</button>
-        <button type="button" data-subtab="md" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); color: var(--text-hint);">💳 МД</button>
-        <button type="button" data-subtab="aplus" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); color: var(--text-hint);">📱 Армія+</button>
+    <section id="tab-reports" class="tab-panel hidden space-y-3.5">
+      <div class="glass-card p-2 flex gap-2">
+        <button type="button" data-subtab="ogd" class="report-sub-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-bold btn-dshv">📄 ОГД</button>
+        <button type="button" data-subtab="md" class="report-sub-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.03); color: var(--text-muted);">💳 МД</button>
+        <button type="button" data-subtab="aplus" class="report-sub-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.03); color: var(--text-muted);">📱 Армія+</button>
       </div>
 
       <div id="report-ogd" class="report-card glass-card p-4 space-y-3 text-xs sm:text-sm">
-        <h2 class="text-base font-bold">📄 Одноразова грошова допомога (ОГД)</h2>
-        <p style="color: var(--text-hint);">Призначається за ушкодження здоров’я (поранення, контузія, травма) або захворювання під час служби, якщо це призвело до інвалідності або часткової втрати працездатності.</p>
-        <div class="p-3 rounded-xl space-y-1" style="background-color: var(--bg-primary);">
-          <div class="font-semibold">Куди подавати:</div>
+        <h2 class="text-base font-extrabold" style="color: #fef3c7;">📄 Одноразова грошова допомога (ОГД)</h2>
+        <p style="color: var(--text-muted);">Призначається за ушкодження здоров’я (поранення, контузія, травма) або захворювання під час служби, якщо це призвело до інвалідності або часткової втрати працездатності.</p>
+        <div class="p-3 rounded-xl space-y-1" style="background: rgba(127, 29, 29, 0.18); border: 1px solid rgba(234, 179, 8, 0.2);">
+          <div class="font-bold text-amber-300">Куди подавати:</div>
           <div>• чинним військовослужбовцям — до своєї військової частини (або через Армія+);</div>
           <div>• звільненим зі служби — до ТЦК та СП за місцем обліку.</div>
         </div>
-        <div class="space-y-1.5">
-          <div class="font-semibold">Порядок подачі та документи:</div>
-          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+        <div class="space-y-2">
+          <div class="font-bold text-slate-200">Порядок подачі та документи:</div>
+          <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-muted);">
             <li>Пройдіть ВЛК (постанова про причинний зв’язок) та ЕКОПФО (група інвалідності або % втрати працездатності).</li>
             <li>Заповніть заяву (Додаток 19) / рапорт і згоду на обробку персональних даних.</li>
-            <li>Підготуйте копії (оригінали майте для засвідчення): рішення ЕКОПФО, постанови ВЛК, довідки про обставини травми/поранення (при захворюванні не потрібна), паспорта, РНОКПП (ІПН), довідки з банку з IBAN.</li>
+            <li>Підготуйте копії (оригінали майте для засвідчення): рішення ЕКОПФО, постанови ВЛК, Довідки № 5 (при захворюванні не потрібна), паспорта, РНОКПП (ІПН), довідки з банку з IBAN.</li>
             <li>Подайте особисто або цінним листом «Укрпошти» з описом вкладення.</li>
           </ol>
         </div>
         <div class="flex flex-wrap gap-2 pt-1">
-          <a href="https://turbota.mil.gov.ua/vyplaty/poryadok-dij-dlya-otrymannya-odnorazovoyi-groshovoyi-dopomogy" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Порядок на Турбота</a>
-          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Рапорти Армія+</a>
+          <a href="https://turbota.mil.gov.ua/vyplaty/poryadok-dij-dlya-otrymannya-odnorazovoyi-groshovoyi-dopomogy" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-3.5 py-2 rounded-xl btn-dshv">🔗 Порядок на Турбота</a>
+          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-3.5 py-2 rounded-xl" style="background: rgba(234, 179, 8, 0.14); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3);">🔗 Рапорти Армія+</a>
         </div>
       </div>
 
       <div id="report-md" class="report-card hidden glass-card p-4 space-y-3 text-xs sm:text-sm">
-        <h2 class="text-base font-bold">💳 Матеріальна допомога (МД)</h2>
-        <p style="color: var(--text-hint);">Виплачується один раз на рік (у межах наявного фонду грошового забезпечення) за наявності поважних підстав — поранення, інвалідність чи лікування, тяжка хвороба, народження дитини, смерть близького родича тощо.</p>
-        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-hint);">
+        <h2 class="text-base font-extrabold" style="color: #fef3c7;">💳 Матеріальна допомога (МД)</h2>
+        <p style="color: var(--text-muted);">Виплачується один раз на рік (у межах наявного фонду грошового забезпечення) за наявності поважних підстав — поранення, інвалідність чи лікування, тяжка хвороба, народження дитини, смерть близького родича тощо.</p>
+        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-muted);">
           <li>Напишіть рапорт на ім’я командира військової частини з проханням про виплату МД на вирішення соціально-побутових питань та зазначте підставу.</li>
           <li>Додайте копії документів, що підтверджують підставу (довідка про поранення/лікування, медвиписки, свідоцтво тощо).</li>
           <li>Подайте рапорт безпосередньому командиру або через Армія+ («Сервіси» → «Рапорти» → «Виплати» → «Матеріальна допомога»).</li>
           <li>Зафіксуйте вхідний номер і дату подачі (або відстежуйте статус у «Моїх рапортах» в Армія+).</li>
         </ol>
         <div class="flex flex-wrap gap-2 pt-1">
-          <a href="https://turbota.mil.gov.ua/raporty/materialna-dopomoga" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Інструкція МД на Турбота</a>
+          <a href="https://turbota.mil.gov.ua/raporty/materialna-dopomoga" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-3.5 py-2 rounded-xl btn-dshv">🔗 Інструкція МД на Турбота</a>
         </div>
       </div>
 
       <div id="report-aplus" class="report-card hidden glass-card p-4 space-y-3 text-xs sm:text-sm">
-        <h2 class="text-base font-bold">📱 Подача рапорту через Армія+</h2>
-        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-hint);">
+        <h2 class="text-base font-extrabold" style="color: #fef3c7;">📱 Подача рапорту через Армія+</h2>
+        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-muted);">
           <li>Відкрийте застосунок Армія+ → вкладка «Сервіси» → «Рапорти» → розділ «Виплати».</li>
           <li>Оберіть потрібний шаблон («Одноразова грошова допомога» або «Матеріальна допомога»).</li>
           <li>Ознайомтеся з умовами й прикріпіть чіткі фото або PDF-копії підтвердних документів.</li>
@@ -241,64 +388,64 @@
           <li>Перевірте рапорт, підпишіть його (КЕП / Дія.Підпис) і відстежуйте статус у вкладці «Мої рапорти».</li>
         </ol>
         <div class="flex flex-wrap gap-2 pt-1">
-          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Офіційна інструкція Армія+</a>
+          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-3.5 py-2 rounded-xl btn-dshv">🔗 Офіційна інструкція Армія+</a>
         </div>
       </div>
     </section>
 
     <!-- TAB 3: ШВИДКІ ІНСТРУКЦІЇ -->
-    <section id="tab-instructions" class="tab-panel hidden fade-in space-y-3">
+    <section id="tab-instructions" class="tab-panel hidden space-y-3">
       <div class="glass-card p-3">
         <input id="instr-search" type="search" class="input-field text-sm" placeholder="🔍 Пошук: Довідка №5, ВЛК, ЕКОПФО, виплати..." />
       </div>
 
       <div id="instr-list" class="space-y-3">
         <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="довідка 5 обставини травми поранення кеп">
-          <h3 class="text-sm sm:text-base font-bold">📄 Довідка про обставини травми (Довідка № 5)</h3>
-          <p style="color: var(--text-hint);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП).</p>
-          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-hint);">
+          <h3 class="text-sm sm:text-base font-bold" style="color: #fef3c7;">📄 Довідка про обставини травми (Довідка № 5)</h3>
+          <p style="color: var(--text-muted);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП).</p>
+          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-muted);">
             <li>Перевірте ПІБ, звання, дату народження та номер частини без помилок.</li>
             <li>Перевірте точну дату, місце та опис обставин.</li>
-            <li>Обов’язкове формулювання: саме «під час ЗАХИСТУ БАТЬКІВЩИНИ» ✅.</li>
+            <li>Обов’язкове формулювання: саме <strong class="text-green-400">«під час ЗАХИСТУ БАТЬКІВЩИНИ»</strong> ✅.</li>
           </ul>
         </article>
 
-        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="влк проходження дистанційна за кордоном направлення постанова">
-          <h3 class="text-sm sm:text-base font-bold">🩺 Проходження ВЛК (та дистанційне ВЛК)</h3>
-          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="влк проходження дистанційна за кордоном направлення постанова 120 діб">
+          <h3 class="text-sm sm:text-base font-bold" style="color: #fef3c7;">🩺 Проходження ВЛК (та дистанційне ВЛК)</h3>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-muted);">
             <li>Отримайте направлення на ВЛК (від командира, начальника медпункту або лікуючого лікаря).</li>
             <li>Підготуйте військовий квиток/посвідчення, виписки з лікарень, обстеження та Довідку № 5.</li>
             <li>Отримайте постанову ВЛК та перевірте причинний зв’язок. Якщо лікування триває далі — відлік 120 діб обнуляється від дати нової постанови ВЛК.</li>
           </ol>
-          <p class="text-xs pt-1" style="color: #60a5fa;">🌍 Лікування за кордоном: можливе дистанційне ВЛК за медичними документами.</p>
+          <p class="text-xs pt-1 text-amber-300">🌍 Лікування за кордоном: можливе дистанційне ВЛК за медичними документами.</p>
         </article>
 
         <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="екопфо мсек інвалідність оцінювання працездатність">
-          <h3 class="text-sm sm:text-base font-bold">📑 ЕКОПФО (оцінювання замість МСЕК)</h3>
-          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+          <h3 class="text-sm sm:text-base font-bold" style="color: #fef3c7;">📑 ЕКОПФО (оцінювання замість МСЕК)</h3>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-muted);">
             <li>Отримайте направлення від лікуючого або профільного лікаря.</li>
             <li>Підготуйте постанову ВЛК про причинний зв’язок поранення чи захворювання.</li>
             <li>Зберіть виписки зі стаціонару, обстеження, паспорт, РНОКПП (ІПН) та військовий документ.</li>
           </ol>
-          <p class="text-xs pt-1" style="color: #4ade80;">✅ Результат: витяг із рішення ЕКОПФО про групу інвалідності або % втрати працездатності для ОГД.</p>
+          <p class="text-xs pt-1 text-green-400">✅ Результат: витяг із рішення ЕКОПФО про групу інвалідності або % втрати працездатності для ОГД.</p>
         </article>
 
         <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="виплати грошове забезпечення 100000 додаткова винагорода лікування">
-          <h3 class="text-sm sm:text-base font-bold">💳 Виплати під час лікування</h3>
-          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-hint);">
-            <li><strong>Грошове забезпечення:</strong> зберігається на весь період лікування та відпустки для лікування за висновком ВЛК.</li>
-            <li><strong>Додаткова винагорода (до 100 000 грн/міс. пропорційно дням):</strong> виплачується за час стаціонарного лікування (зокрема за кордоном) та відпустки для лікування після тяжкого поранення при захисті Батьківщини — на підставі Довідки № 5 та медвиписок.</li>
+          <h3 class="text-sm sm:text-base font-bold" style="color: #fef3c7;">💳 Виплати під час лікування</h3>
+          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-muted);">
+            <li><strong class="text-slate-200">Грошове забезпечення:</strong> зберігається на весь період лікування та відпустки для лікування за висновком ВЛК.</li>
+            <li><strong class="text-slate-200">Додаткова винагорода (до 100 000 грн/міс. пропорційно дням):</strong> виплачується за час стаціонарного лікування (зокрема за кордоном) та відпустки для лікування після тяжкого поранення при захисті Батьківщини — на підставі Довідки № 5 та медвиписок.</li>
           </ul>
         </article>
       </div>
     </section>
 
     <!-- TAB 4: ФОРМА ЗВЕРНЕННЯ / АНКЕТИ -->
-    <section id="tab-form" class="tab-panel hidden fade-in space-y-3.5">
-      <div class="glass-card p-4 space-y-3">
+    <section id="tab-form" class="tab-panel hidden space-y-3.5">
+      <div class="glass-card p-4 space-y-3.5">
         <div>
-          <h2 class="text-base font-bold">📋 Форма звернення та анкета</h2>
-          <p class="text-xs mt-0.5" style="color: var(--text-hint);">Заповніть поля — звернення автоматично надійде відповідальному за супровід 3 батальйону.</p>
+          <h2 class="text-base font-extrabold" style="color: #fef3c7;">📋 Форма звернення та анкета</h2>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted);">Заповніть поля — звернення автоматично надійде відповідальному за супровід 3 батальйону.</p>
         </div>
 
         <form id="appeal-form" class="space-y-3">
@@ -348,57 +495,57 @@
             <textarea id="f-text" rows="4" class="input-field" placeholder="Опишіть коротко, яка допомога або інформація потрібна..." required></textarea>
           </div>
 
-          <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-sm shadow-lg transition active:scale-[0.99]">
+          <button type="submit" class="btn-dshv w-full py-3.5 rounded-xl font-bold text-sm">
             📤 Надіслати звернення в бот
           </button>
         </form>
 
-        <div id="form-fallback" class="hidden p-3 rounded-xl space-y-2 text-xs" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">
-          <div class="font-semibold text-amber-400">ℹ️ Відкрито поза Telegram-кнопкою</div>
-          <p style="color: var(--text-hint);">Скопіюйте сформований текст і надішліть його в чат бота:</p>
-          <pre id="form-preview-text" class="whitespace-pre-wrap text-xs p-2 rounded-lg" style="background-color: var(--bg-secondary);"></pre>
-          <button type="button" id="copy-appeal-btn" class="px-3 py-2 rounded-lg font-semibold btn-primary">📋 Скопіювати текст</button>
+        <div id="form-fallback" class="hidden p-3.5 rounded-xl space-y-2 text-xs" style="background: rgba(10, 12, 17, 0.85); border: 1px solid var(--border-gold);">
+          <div class="font-bold text-amber-300">ℹ️ Дані підготовлено</div>
+          <p style="color: var(--text-muted);">Скопіюйте сформований текст і надішліть його в чат бота:</p>
+          <pre id="form-preview-text" class="whitespace-pre-wrap text-xs p-2.5 rounded-lg" style="background: rgba(255,255,255,0.04);"></pre>
+          <button type="button" id="copy-appeal-btn" class="px-4 py-2 rounded-xl text-xs btn-gold">📋 Скопіювати текст</button>
         </div>
       </div>
     </section>
 
     <!-- TAB 5: ГАРЯЧІ ЛІНІЇ -->
-    <section id="tab-hotlines" class="tab-panel hidden fade-in space-y-3">
-      <div class="glass-card p-4">
-        <h2 class="text-base font-bold">📞 Гарячі лінії служби супроводу</h2>
-        <p class="text-xs mt-0.5" style="color: var(--text-hint);">Натисніть «Зателефонувати» для миттєвого дзвінка з мобільного.</p>
+    <section id="tab-hotlines" class="tab-panel hidden space-y-3">
+      <div class="glass-card p-4" style="border-color: rgba(234, 179, 8, 0.22);">
+        <h2 class="text-base font-extrabold" style="color: #fef3c7;">📞 Гарячі лінії служби супроводу</h2>
+        <p class="text-xs mt-0.5" style="color: var(--text-muted);">Натисніть «Виклик» для миттєвого дзвінка з мобільного.</p>
       </div>
 
       <div class="glass-card p-4 flex items-center justify-between gap-3">
         <div>
-          <div class="text-xs font-semibold" style="color: var(--text-hint);">Служба супроводу · 3-й батальйон</div>
-          <div class="text-lg font-extrabold tracking-wide mt-0.5">075 998 06 61</div>
+          <div class="text-xs font-semibold" style="color: var(--text-muted);">Служба супроводу · 3-й батальйон</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5 text-amber-300">075 998 06 61</div>
         </div>
         <div class="flex gap-2 shrink-0">
-          <button type="button" data-copy="0759980661" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
-          <a href="tel:+380759980661" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
-        </div>
-      </div>
-
-      <div class="glass-card p-4 flex items-center justify-between gap-3">
-        <div>
-          <div class="text-xs font-semibold" style="color: var(--text-hint);">Гаряча лінія супроводу</div>
-          <div class="text-lg font-extrabold tracking-wide mt-0.5">(093) 56 07 936</div>
-        </div>
-        <div class="flex gap-2 shrink-0">
-          <button type="button" data-copy="0935607936" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
-          <a href="tel:+380935607936" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+          <button type="button" data-copy="0759980661" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);">📋</button>
+          <a href="tel:+380759980661" class="btn-dshv px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
         </div>
       </div>
 
       <div class="glass-card p-4 flex items-center justify-between gap-3">
         <div>
-          <div class="text-xs font-semibold" style="color: var(--text-hint);">Гаряча лінія А4350 (46 ОАеМБр)</div>
-          <div class="text-lg font-extrabold tracking-wide mt-0.5">0 800 339 90 46</div>
+          <div class="text-xs font-semibold" style="color: var(--text-muted);">Гаряча лінія супроводу</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5 text-amber-300">(093) 56 07 936</div>
         </div>
         <div class="flex gap-2 shrink-0">
-          <button type="button" data-copy="08003399046" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
-          <a href="tel:08003399046" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+          <button type="button" data-copy="0935607936" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);">📋</button>
+          <a href="tel:+380935607936" class="btn-dshv px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+        </div>
+      </div>
+
+      <div class="glass-card p-4 flex items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold" style="color: var(--text-muted);">Гаряча лінія А4350 (46 ОАеМБр)</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5 text-amber-300">0 800 339 90 46</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" data-copy="08003399046" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);">📋</button>
+          <a href="tel:08003399046" class="btn-dshv px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
         </div>
       </div>
     </section>
@@ -406,7 +553,7 @@
   </main>
 
   <!-- Toast notification -->
-  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-xl hidden" style="background-color: #16a34a; color: #fff;"></div>
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-2xl hidden border" style="background: #14532d; border-color: rgba(74, 222, 128, 0.4); color: #fff;"></div>
 
   <script>
     (function () {
@@ -415,6 +562,14 @@
         try {
           tg.ready();
           tg.expand();
+          if (tg.setHeaderColor) tg.setHeaderColor('#0a0c11');
+          if (tg.setBackgroundColor) tg.setBackgroundColor('#0a0c11');
+        } catch (e) {}
+      }
+
+      function haptic() {
+        try {
+          if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         } catch (e) {}
       }
 
@@ -427,13 +582,15 @@
       function showToast(msg, isError) {
         const el = document.getElementById('toast');
         el.textContent = msg;
-        el.style.backgroundColor = isError ? '#dc2626' : '#16a34a';
+        el.style.background = isError ? '#7f1d1d' : '#14532d';
+        el.style.borderColor = isError ? 'rgba(248, 113, 113, 0.5)' : 'rgba(74, 222, 128, 0.4)';
         el.classList.remove('hidden');
         clearTimeout(window.__toastTimer);
         window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
       }
 
       function copyText(txt) {
+        haptic();
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(txt).then(() => showToast('Скопійовано!')).catch(() => fallbackCopy(txt));
         } else {
@@ -462,6 +619,7 @@
       const tabPanels = document.querySelectorAll('.tab-panel');
       tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
+          haptic();
           const target = btn.getAttribute('data-tab');
           tabBtns.forEach((b) => b.classList.remove('active'));
           btn.classList.add('active');
@@ -480,14 +638,15 @@
       const reportCards = document.querySelectorAll('.report-card');
       subBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
+          haptic();
           const target = btn.getAttribute('data-subtab');
           subBtns.forEach((b) => {
-            b.classList.remove('btn-primary');
-            b.style.backgroundColor = 'var(--bg-primary)';
-            b.style.color = 'var(--text-hint)';
+            b.classList.remove('btn-dshv', 'font-bold');
+            b.style.background = 'rgba(255,255,255,0.03)';
+            b.style.color = 'var(--text-muted)';
           });
-          btn.classList.add('btn-primary');
-          btn.style.backgroundColor = '';
+          btn.classList.add('btn-dshv', 'font-bold');
+          btn.style.background = '';
           btn.style.color = '';
           reportCards.forEach((c) => {
             c.classList.toggle('hidden', c.id !== 'report-' + target);
@@ -518,13 +677,15 @@
           const checked = !!savedChecks[item.id];
           if (checked) done++;
           const row = document.createElement('label');
-          row.className = 'flex items-center gap-3 p-2.5 rounded-xl cursor-pointer text-xs sm:text-sm';
-          row.style.backgroundColor = 'var(--bg-primary)';
+          row.className = 'flex items-center gap-3 p-3 rounded-xl cursor-pointer text-xs sm:text-sm transition';
+          row.style.background = checked ? 'rgba(234, 179, 8, 0.08)' : 'rgba(255, 255, 255, 0.03)';
+          row.style.border = checked ? '1px solid rgba(234, 179, 8, 0.25)' : '1px solid var(--border-subtle)';
           const cb = document.createElement('input');
           cb.type = 'checkbox';
           cb.checked = checked;
-          cb.className = 'w-4 h-4 accent-blue-600 shrink-0';
+          cb.className = 'w-4 h-4 accent-amber-500 shrink-0';
           cb.addEventListener('change', () => {
+            haptic();
             savedChecks[item.id] = cb.checked;
             try { localStorage.setItem('suprovid_checks_v1', JSON.stringify(savedChecks)); } catch (e) {}
             renderChecklist();
@@ -533,19 +694,22 @@
           span.textContent = item.label;
           if (checked) {
             span.style.textDecoration = 'line-through';
-            span.style.color = 'var(--text-hint)';
+            span.style.color = 'var(--text-muted)';
           }
           row.appendChild(cb);
           row.appendChild(span);
           container.appendChild(row);
         });
         document.getElementById('checklist-progress').textContent = done + ' / ' + checklistData.length;
+        const pct = Math.round((done / checklistData.length) * 100);
+        document.getElementById('checklist-bar').style.width = pct + '%';
       }
       renderChecklist();
 
       // 120-day VLK Calculator
       const vlkInput = document.getElementById('vlk-date-input');
       const vlkResult = document.getElementById('vlk-calc-result');
+      const vlkBar = document.getElementById('vlk-progress-bar');
       function updateVlkCalc() {
         if (!vlkInput || !vlkInput.value) return;
         try { localStorage.setItem('suprovid_vlk_date_v1', vlkInput.value); } catch (e) {}
@@ -556,13 +720,22 @@
         const left = 120 - elapsed;
         const due = new Date(start.getTime() + 120 * 86400000);
         const dueStr = due.toLocaleDateString('uk-UA');
-        if (left > 0) {
-          vlkResult.style.color = left <= 14 ? '#facc15' : '#4ade80';
-          vlkResult.textContent = 'Минуло: ' + elapsed + ' діб · Залишилося: ' + left + ' діб (120-та доба: ' + dueStr + ')';
+        const pct = Math.min(100, Math.round((elapsed / 120) * 100));
+        vlkBar.style.width = pct + '%';
+        if (left > 14) {
+          vlkBar.style.background = 'linear-gradient(90deg, #16a34a, #22c55e)';
+          vlkResult.style.color = '#4ade80';
+          vlkResult.textContent = 'Минуло: ' + elapsed + ' / 120 діб · Залишилося: ' + left + ' діб (120-та доба: ' + dueStr + ')';
+        } else if (left > 0) {
+          vlkBar.style.background = 'linear-gradient(90deg, #ca8a04, #eab308)';
+          vlkResult.style.color = '#fde047';
+          vlkResult.textContent = '⏳ Залишилося ' + left + ' діб до ВЛК (120-та доба: ' + dueStr + ')';
         } else if (left === 0) {
+          vlkBar.style.background = '#dc2626';
           vlkResult.style.color = '#f87171';
           vlkResult.textContent = '⚠️ Сьогодні 120-та доба (' + dueStr + ')! Потрібно пройти ВЛК.';
         } else {
+          vlkBar.style.background = '#dc2626';
           vlkResult.style.color = '#f87171';
           vlkResult.textContent = '🚨 Термін 120 діб перевищено на ' + Math.abs(left) + ' діб (була ' + dueStr + '). Пройдіть ВЛК та обнуліть відлік.';
         }
@@ -572,7 +745,7 @@
           const savedVlk = localStorage.getItem('suprovid_vlk_date_v1');
           if (savedVlk) { vlkInput.value = savedVlk; updateVlkCalc(); }
         } catch (e) {}
-        vlkInput.addEventListener('change', updateVlkCalc);
+        vlkInput.addEventListener('change', () => { haptic(); updateVlkCalc(); });
       }
 
       // Instructions Search
@@ -595,6 +768,7 @@
       const form = document.getElementById('appeal-form');
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        haptic();
         const payload = {
           kind: 'appeal',
           appeal_type: document.getElementById('f-type').value,
