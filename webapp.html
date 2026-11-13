@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Супровід · 3 батальйон (46 ОАеМБр)</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: var(--tg-theme-bg-color, #0f172a);
+      --bg-secondary: var(--tg-theme-secondary-bg-color, #1e293b);
+      --text-primary: var(--tg-theme-text-color, #f8fafc);
+      --text-hint: var(--tg-theme-hint-color, #94a3b8);
+      --accent: var(--tg-theme-button-color, #2563eb);
+      --accent-text: var(--tg-theme-button-text-color, #ffffff);
+      --card-border: rgba(148, 163, 184, 0.18);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .glass-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+    }
+    .tab-btn {
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background-color: var(--accent);
+      color: var(--accent-text);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    }
+    .tab-btn:not(.active) {
+      background-color: var(--bg-secondary);
+      color: var(--text-hint);
+      border: 1px solid var(--card-border);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: var(--accent-text);
+    }
+    .input-field {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      width: 100%;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .input-field:focus {
+      border-color: var(--accent);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .fade-in { animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="pb-24">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 backdrop-blur-md border-b" style="background-color: rgba(15, 23, 42, 0.88); border-color: var(--card-border);">
+    <div class="max-w-2xl mx-auto px-4 pt-3 pb-2.5">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg font-bold shrink-0" style="background: linear-gradient(135deg, #1d4ed8, #0f766e); color: #fff;">
+            🛡️
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-sm sm:text-base font-bold leading-tight truncate">Служба супроводу · 3 батальйон</h1>
+            <p class="text-xs truncate" style="color: var(--text-hint);">46 ОАеМБр · Пам’ятка, рапорти, інструкції</p>
+          </div>
+        </div>
+        <span id="tg-badge" class="text-[11px] font-semibold px-2.5 py-1 rounded-full shrink-0" style="background-color: rgba(34, 197, 94, 0.15); color: #4ade80;">
+          Онлайн
+        </span>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex gap-2 overflow-x-auto no-scrollbar pt-3 pb-1" aria-label="Розділи">
+        <button type="button" data-tab="pamyatka" class="tab-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>📖</span><span>Пам’ятка</span>
+        </button>
+        <button type="button" data-tab="reports" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>📝</span><span>Рапорти</span>
+        </button>
+        <button type="button" data-tab="instructions" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>⚖️</span><span>Інструкції</span>
+        </button>
+        <button type="button" data-tab="form" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>📋</span><span>Звернення</span>
+        </button>
+        <button type="button" data-tab="hotlines" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>📞</span><span>Гарячі лінії</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4">
+
+    <!-- TAB 1: ПАМ'ЯТКА 3 БАТАЛЬЙОНУ -->
+    <section id="tab-pamyatka" class="tab-panel fade-in space-y-3.5">
+      <div class="glass-card p-4 border-l-4" style="border-left-color: #eab308;">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <h2 class="text-base font-bold">📖 Пам’ятка пораненого / військовослужбовця</h2>
+            <p class="text-xs mt-0.5" style="color: var(--text-hint);">3 батальйон · 46 окрема аеромобільна бригада</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-lg" style="background-color: rgba(234, 179, 8, 0.16); color: #facc15;">Важливо</span>
+        </div>
+      </div>
+
+      <!-- Critical Check: Wording -->
+      <div class="glass-card p-4 space-y-2.5">
+        <h3 class="text-sm font-bold flex items-center gap-2">
+          <span>⚠️</span><span>Критична перевірка формулювання у ВЛК та документах</span>
+        </h3>
+        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background-color: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3);">
+          <div class="font-bold text-green-400">✅ ПРАВИЛЬНО:</div>
+          <div class="mt-0.5">«ТАК, пов’язане із захистом Батьківщини»</div>
+        </div>
+        <div class="p-3 rounded-xl text-xs sm:text-sm" style="background-color: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3);">
+          <div class="font-bold text-red-400">❌ ПОМИЛКА (вимагайте виправлення!):</div>
+          <div class="mt-0.5">«пов’язане з проходженням військової служби» — позбавляє бойових виплат та ОГД!</div>
+        </div>
+      </div>
+
+      <!-- Key Rules -->
+      <div class="glass-card p-4 space-y-3 text-sm">
+        <h3 class="font-bold text-sm">📌 5 обов’язкових правил супроводу</h3>
+        <div class="space-y-2.5 text-xs sm:text-sm leading-relaxed">
+          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
+            <div class="font-semibold text-blue-400">1. Довідки про перебування в медзакладі</div>
+            <p class="mt-1" style="color: var(--text-hint);">Отримуйте та передавайте в частину: одразу при госпіталізації, наприкінці кожного місяця, а також при кожному переміщенні, евакуації, виписці чи переході на реабілітацію.</p>
+          </div>
+          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
+            <div class="font-semibold text-blue-400">2. Довідка про обставини поранення (Довідка № 5)</div>
+            <p class="mt-1" style="color: var(--text-hint);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП). Без неї неможливі правильний висновок ВЛК та оформлення ОГД.</p>
+          </div>
+          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
+            <div class="font-semibold text-blue-400">3. Контроль 120 діб лікування</div>
+            <p class="mt-1" style="color: var(--text-hint);">Якщо безперервне лікування триває понад 120 діб — обов’язково пройдіть ВЛК для продовження лікування або визначення придатності.</p>
+          </div>
+          <div class="p-3 rounded-xl" style="background-color: var(--bg-primary);">
+            <div class="font-semibold text-blue-400">4. Зберігайте копії всіх документів</div>
+            <p class="mt-1" style="color: var(--text-hint);">Форма 100, виписки з лікарень, рапорти, направлення — фотографуйте або скануйте у хорошій якості та завантажуйте в розділ «📁 Документи» в боті.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Document Checklist -->
+      <div class="glass-card p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold">✅ Мій чекліст документів</h3>
+          <span id="checklist-progress" class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color: rgba(37, 99, 235, 0.2); color: #60a5fa;">0 / 5</span>
+        </div>
+        <div id="checklist-items" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: РАПОРТИ (ОГД / МД / АРМІЯ+) -->
+    <section id="tab-reports" class="tab-panel hidden fade-in space-y-3.5">
+      <div class="glass-card p-3 flex gap-2">
+        <button type="button" data-subtab="ogd" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold btn-primary">📄 ОГД</button>
+        <button type="button" data-subtab="md" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); color: var(--text-hint);">💳 МД</button>
+        <button type="button" data-subtab="aplus" class="report-sub-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); color: var(--text-hint);">📱 Армія+</button>
+      </div>
+
+      <div id="report-ogd" class="report-card glass-card p-4 space-y-3 text-xs sm:text-sm">
+        <h2 class="text-base font-bold">📄 Одноразова грошова допомога (ОГД)</h2>
+        <p style="color: var(--text-hint);">Призначається за ушкодження здоров’я (поранення, контузія, травма) або захворювання під час служби, якщо це призвело до інвалідності або часткової втрати працездатності.</p>
+        <div class="p-3 rounded-xl space-y-1" style="background-color: var(--bg-primary);">
+          <div class="font-semibold">Куди подавати:</div>
+          <div>• чинним військовослужбовцям — до своєї військової частини (або через Армія+);</div>
+          <div>• звільненим зі служби — до ТЦК та СП за місцем обліку.</div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="font-semibold">Порядок подачі та документи:</div>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+            <li>Пройдіть ВЛК (постанова про причинний зв’язок) та ЕКОПФО (група інвалідності або % втрати працездатності).</li>
+            <li>Заповніть заяву (Додаток 19) / рапорт і згоду на обробку персональних даних.</li>
+            <li>Підготуйте копії (оригінали майте для засвідчення): рішення ЕКОПФО, постанови ВЛК, довідки про обставини травми/поранення (при захворюванні не потрібна), паспорта, РНОКПП (ІПН), довідки з банку з IBAN.</li>
+            <li>Подайте особисто або цінним листом «Укрпошти» з описом вкладення.</li>
+          </ol>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <a href="https://turbota.mil.gov.ua/vyplaty/poryadok-dij-dlya-otrymannya-odnorazovoyi-groshovoyi-dopomogy" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Порядок на Турбота</a>
+          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Рапорти Армія+</a>
+        </div>
+      </div>
+
+      <div id="report-md" class="report-card hidden glass-card p-4 space-y-3 text-xs sm:text-sm">
+        <h2 class="text-base font-bold">💳 Матеріальна допомога (МД)</h2>
+        <p style="color: var(--text-hint);">Виплачується один раз на рік (у межах наявного фонду грошового забезпечення) за наявності поважних підстав — поранення, інвалідність чи лікування, тяжка хвороба, народження дитини, смерть близького родича тощо.</p>
+        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-hint);">
+          <li>Напишіть рапорт на ім’я командира військової частини з проханням про виплату МД на вирішення соціально-побутових питань та зазначте підставу.</li>
+          <li>Додайте копії документів, що підтверджують підставу (довідка про поранення/лікування, медвиписки, свідоцтво тощо).</li>
+          <li>Подайте рапорт безпосередньому командиру або через Армія+ («Сервіси» → «Рапорти» → «Виплати» → «Матеріальна допомога»).</li>
+          <li>Зафіксуйте вхідний номер і дату подачі (або відстежуйте статус у «Моїх рапортах» в Армія+).</li>
+        </ol>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <a href="https://turbota.mil.gov.ua/raporty/materialna-dopomoga" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Інструкція МД на Турбота</a>
+        </div>
+      </div>
+
+      <div id="report-aplus" class="report-card hidden glass-card p-4 space-y-3 text-xs sm:text-sm">
+        <h2 class="text-base font-bold">📱 Подача рапорту через Армія+</h2>
+        <ol class="list-decimal pl-4 space-y-1.5" style="color: var(--text-hint);">
+          <li>Відкрийте застосунок Армія+ → вкладка «Сервіси» → «Рапорти» → розділ «Виплати».</li>
+          <li>Оберіть потрібний шаблон («Одноразова грошова допомога» або «Матеріальна допомога»).</li>
+          <li>Ознайомтеся з умовами й прикріпіть чіткі фото або PDF-копії підтвердних документів.</li>
+          <li>Вкажіть дані про частину, посаду, звання та Армія ID безпосереднього командира.</li>
+          <li>Перевірте рапорт, підпишіть його (КЕП / Дія.Підпис) і відстежуйте статус у вкладці «Мої рапорти».</li>
+        </ol>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <a href="https://aplus.mod.gov.ua/raporty/na-vyplaty" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold px-3 py-2 rounded-xl" style="background-color: rgba(37, 99, 235, 0.16); color: #60a5fa;">🔗 Офіційна інструкція Армія+</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ШВИДКІ ІНСТРУКЦІЇ -->
+    <section id="tab-instructions" class="tab-panel hidden fade-in space-y-3">
+      <div class="glass-card p-3">
+        <input id="instr-search" type="search" class="input-field text-sm" placeholder="🔍 Пошук: Довідка №5, ВЛК, ЕКОПФО, виплати..." />
+      </div>
+
+      <div id="instr-list" class="space-y-3">
+        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="довідка 5 обставини травми поранення кеп">
+          <h3 class="text-sm sm:text-base font-bold">📄 Довідка про обставини травми (Довідка № 5)</h3>
+          <p style="color: var(--text-hint);">Виготовляє військова частина у форматі PDF з електронним підписом (КЕП).</p>
+          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-hint);">
+            <li>Перевірте ПІБ, звання, дату народження та номер частини без помилок.</li>
+            <li>Перевірте точну дату, місце та опис обставин.</li>
+            <li>Обов’язкове формулювання: саме «під час ЗАХИСТУ БАТЬКІВЩИНИ» ✅.</li>
+          </ul>
+        </article>
+
+        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="влк проходження дистанційна за кордоном направлення постанова">
+          <h3 class="text-sm sm:text-base font-bold">🩺 Проходження ВЛК (та дистанційне ВЛК)</h3>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+            <li>Отримайте направлення на ВЛК (від командира, начальника медпункту або лікуючого лікаря).</li>
+            <li>Підготуйте військовий квиток/посвідчення, виписки з лікарень, обстеження та Довідку № 5.</li>
+            <li>Отримайте постанову ВЛК та перевірте причинний зв’язок.</li>
+          </ol>
+          <p class="text-xs pt-1" style="color: #60a5fa;">🌍 Лікування за кордоном: можливе дистанційне ВЛК за медичними документами.</p>
+        </article>
+
+        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="екопфо мсек інвалідність оцінювання працездатність">
+          <h3 class="text-sm sm:text-base font-bold">📑 ЕКОПФО (оцінювання замість МСЕК)</h3>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--text-hint);">
+            <li>Отримайте направлення від лікуючого або профільного лікаря.</li>
+            <li>Підготуйте постанову ВЛК про причинний зв’язок поранення чи захворювання.</li>
+            <li>Зберіть виписки зі стаціонару, обстеження, паспорт, РНОКПП (ІПН) та військовий документ.</li>
+          </ol>
+          <p class="text-xs pt-1" style="color: #4ade80;">✅ Результат: витяг із рішення ЕКОПФО про групу інвалідності або % втрати працездатності для ОГД.</p>
+        </article>
+
+        <article class="instr-card glass-card p-4 space-y-2 text-xs sm:text-sm" data-keywords="виплати грошове забезпечення 100000 додаткова винагорода лікування">
+          <h3 class="text-sm sm:text-base font-bold">💳 Виплати під час лікування</h3>
+          <ul class="list-disc pl-4 space-y-1" style="color: var(--text-hint);">
+            <li><strong>Грошове забезпечення:</strong> зберігається на весь період лікування та відпустки для лікування за висновком ВЛК.</li>
+            <li><strong>Додаткова винагорода (до 100 000 грн/міс. пропорційно дням):</strong> виплачується за час стаціонарного лікування (зокрема за кордоном) та відпустки для лікування після тяжкого поранення при захисті Батьківщини — на підставі Довідки № 5 та медвиписок.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- TAB 4: ФОРМА ЗВЕРНЕННЯ / АНКЕТИ -->
+    <section id="tab-form" class="tab-panel hidden fade-in space-y-3.5">
+      <div class="glass-card p-4 space-y-3">
+        <div>
+          <h2 class="text-base font-bold">📋 Форма звернення та анкета</h2>
+          <p class="text-xs mt-0.5" style="color: var(--text-hint);">Заповніть поля — звернення автоматично надійде відповідальному за супровід 3 батальйону.</p>
+        </div>
+
+        <form id="appeal-form" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1" for="f-type">Тип звернення</label>
+            <select id="f-type" class="input-field">
+              <option value="Потреба / прохання про допомогу">📌 Потреба / прохання про допомогу</option>
+              <option value="Зв’язатися з фахівцем">🤝 Зв’язатися з фахівцем</option>
+              <option value="Питання щодо документів / виплат / ВЛК">📄 Питання щодо документів / виплат / ВЛК</option>
+              <option value="Реєстрація / оновлення анкети">📝 Реєстрація / оновлення даних анкети</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold mb-1" for="f-role">Категорія</label>
+              <select id="f-role" class="input-field">
+                <option value="Військовослужбовець">🪖 Військовослужбовець</option>
+                <option value="Член родини / близький">👨‍👩‍👧 Член родини / близький</option>
+                <option value="Працівник / фахівець">💼 Працівник / фахівець</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1" for="f-phone">Контактний телефон *</label>
+              <input id="f-phone" type="tel" class="input-field" placeholder="+380..." required />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1" for="f-name">ПІБ (повністю) *</label>
+            <input id="f-name" type="text" class="input-field" placeholder="Прізвище Ім’я По батькові" required />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold mb-1" for="f-callsign">Позивний (якщо є)</label>
+              <input id="f-callsign" type="text" class="input-field" placeholder="Наприклад: Сокіл або немає" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1" for="f-unit">Рота / підрозділ *</label>
+              <input id="f-unit" type="text" class="input-field" placeholder="Наприклад: 2 рота, мінбатр" required />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1" for="f-text">Суть звернення або потреба *</label>
+            <textarea id="f-text" rows="4" class="input-field" placeholder="Опишіть коротко, яка допомога або інформація потрібна..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-sm shadow-lg transition active:scale-[0.99]">
+            📤 Надіслати звернення в бот
+          </button>
+        </form>
+
+        <div id="form-fallback" class="hidden p-3 rounded-xl space-y-2 text-xs" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">
+          <div class="font-semibold text-amber-400">ℹ️ Відкрито поза Telegram-кнопкою</div>
+          <p style="color: var(--text-hint);">Скопіюйте сформований текст і надішліть його в чат бота:</p>
+          <pre id="form-preview-text" class="whitespace-pre-wrap text-xs p-2 rounded-lg" style="background-color: var(--bg-secondary);"></pre>
+          <button type="button" id="copy-appeal-btn" class="px-3 py-2 rounded-lg font-semibold btn-primary">📋 Скопіювати текст</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: ГАРЯЧІ ЛІНІЇ -->
+    <section id="tab-hotlines" class="tab-panel hidden fade-in space-y-3">
+      <div class="glass-card p-4">
+        <h2 class="text-base font-bold">📞 Гарячі лінії служби супроводу</h2>
+        <p class="text-xs mt-0.5" style="color: var(--text-hint);">Натисніть «Зателефонувати» для миттєвого дзвінка з мобільного.</p>
+      </div>
+
+      <div class="glass-card p-4 flex items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold" style="color: var(--text-hint);">Служба супроводу · 3-й батальйон</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5">075 998 06 61</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" data-copy="0759980661" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
+          <a href="tel:+380759980661" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+        </div>
+      </div>
+
+      <div class="glass-card p-4 flex items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold" style="color: var(--text-hint);">Гаряча лінія супроводу</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5">(093) 56 07 936</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" data-copy="0935607936" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
+          <a href="tel:+380935607936" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+        </div>
+      </div>
+
+      <div class="glass-card p-4 flex items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold" style="color: var(--text-hint);">Гаряча лінія А4350 (46 ОАеМБр)</div>
+          <div class="text-lg font-extrabold tracking-wide mt-0.5">0 800 339 90 46</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" data-copy="08003399046" class="copy-phone-btn px-3 py-2.5 rounded-xl text-xs font-semibold" style="background-color: var(--bg-primary); border: 1px solid var(--card-border);">📋</button>
+          <a href="tel:08003399046" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5">📞 Виклик</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-xl hidden" style="background-color: #16a34a; color: #fff;"></div>
+
+  <script>
+    (function () {
+      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      if (tg) {
+        try {
+          tg.ready();
+          tg.expand();
+        } catch (e) {}
+      }
+
+      const badge = document.getElementById('tg-badge');
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const u = tg.initDataUnsafe.user;
+        badge.textContent = u.first_name ? u.first_name : 'Telegram';
+      }
+
+      function showToast(msg, isError) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.style.backgroundColor = isError ? '#dc2626' : '#16a34a';
+        el.classList.remove('hidden');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+      }
+
+      function copyText(txt) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(() => showToast('Скопійовано!')).catch(() => fallbackCopy(txt));
+        } else {
+          fallbackCopy(txt);
+        }
+      }
+
+      function fallbackCopy(txt) {
+        const ta = document.createElement('textarea');
+        ta.value = txt;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('Скопійовано!');
+        } catch (e) {
+          showToast('Не вдалося скопіювати', true);
+        }
+        document.body.removeChild(ta);
+      }
+
+      // Main Tabs
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+          tabBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          tabPanels.forEach((p) => {
+            if (p.id === 'tab-' + target) {
+              p.classList.remove('hidden');
+            } else {
+              p.classList.add('hidden');
+            }
+          });
+        });
+      });
+
+      // Reports Sub-tabs
+      const subBtns = document.querySelectorAll('.report-sub-btn');
+      const reportCards = document.querySelectorAll('.report-card');
+      subBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-subtab');
+          subBtns.forEach((b) => {
+            b.classList.remove('btn-primary');
+            b.style.backgroundColor = 'var(--bg-primary)';
+            b.style.color = 'var(--text-hint)';
+          });
+          btn.classList.add('btn-primary');
+          btn.style.backgroundColor = '';
+          btn.style.color = '';
+          reportCards.forEach((c) => {
+            c.classList.toggle('hidden', c.id !== 'report-' + target);
+          });
+        });
+      });
+
+      // Checklist with localStorage
+      const checklistData = [
+        { id: 'f100', label: 'Форма 100 (первинна медична картка)' },
+        { id: 'hosp', label: 'Довідка про перебування в медзакладі' },
+        { id: 'inj5', label: 'Довідка № 5 про обставини поранення (PDF з КЕП)' },
+        { id: 'vlk', label: 'Постанова ВЛК («пов’язане із захистом Батьківщини»)' },
+        { id: 'ekopfo', label: 'Витяг ЕКОПФО (за потреби для ОГД)' }
+      ];
+      let savedChecks = {};
+      try {
+        savedChecks = JSON.parse(localStorage.getItem('suprovid_checks_v1') || '{}');
+      } catch (e) {
+        savedChecks = {};
+      }
+
+      function renderChecklist() {
+        const container = document.getElementById('checklist-items');
+        container.innerHTML = '';
+        let done = 0;
+        checklistData.forEach((item) => {
+          const checked = !!savedChecks[item.id];
+          if (checked) done++;
+          const row = document.createElement('label');
+          row.className = 'flex items-center gap-3 p-2.5 rounded-xl cursor-pointer text-xs sm:text-sm';
+          row.style.backgroundColor = 'var(--bg-primary)';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.checked = checked;
+          cb.className = 'w-4 h-4 accent-blue-600 shrink-0';
+          cb.addEventListener('change', () => {
+            savedChecks[item.id] = cb.checked;
+            try { localStorage.setItem('suprovid_checks_v1', JSON.stringify(savedChecks)); } catch (e) {}
+            renderChecklist();
+          });
+          const span = document.createElement('span');
+          span.textContent = item.label;
+          if (checked) {
+            span.style.textDecoration = 'line-through';
+            span.style.color = 'var(--text-hint)';
+          }
+          row.appendChild(cb);
+          row.appendChild(span);
+          container.appendChild(row);
+        });
+        document.getElementById('checklist-progress').textContent = done + ' / ' + checklistData.length;
+      }
+      renderChecklist();
+
+      // Instructions Search
+      const searchInput = document.getElementById('instr-search');
+      const instrCards = document.querySelectorAll('.instr-card');
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim().toLowerCase();
+        instrCards.forEach((card) => {
+          const text = (card.textContent + ' ' + (card.getAttribute('data-keywords') || '')).toLowerCase();
+          card.classList.toggle('hidden', q !== '' && !text.includes(q));
+        });
+      });
+
+      // Hotlines copy buttons
+      document.querySelectorAll('.copy-phone-btn').forEach((btn) => {
+        btn.addEventListener('click', () => copyText(btn.getAttribute('data-copy')));
+      });
+
+      // Appeal Form Submission
+      const form = document.getElementById('appeal-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const payload = {
+          kind: 'appeal',
+          appeal_type: document.getElementById('f-type').value,
+          role_type: document.getElementById('f-role').value,
+          full_name: document.getElementById('f-name').value.trim(),
+          callsign: document.getElementById('f-callsign').value.trim() || 'немає',
+          unit: document.getElementById('f-unit').value.trim(),
+          phone: document.getElementById('f-phone').value.trim(),
+          text: document.getElementById('f-text').value.trim()
+        };
+        if (!payload.full_name || !payload.unit || !payload.phone || !payload.text) {
+          showToast('Заповніть усі обов’язкові поля (*)', true);
+          return;
+        }
+        const jsonStr = JSON.stringify(payload);
+        if (tg && typeof tg.sendData === 'function' && tg.initData) {
+          try {
+            tg.sendData(jsonStr);
+            showToast('Звернення надіслано в бот!');
+            return;
+          } catch (err) {}
+        }
+        const preview = [
+          'Тип: ' + payload.appeal_type,
+          'Категорія: ' + payload.role_type,
+          'ПІБ: ' + payload.full_name,
+          'Позивний: ' + payload.callsign,
+          'Підрозділ: ' + payload.unit,
+          'Телефон: ' + payload.phone,
+          'Звернення: ' + payload.text
+        ].join('\n');
+        document.getElementById('form-preview-text').textContent = preview;
+        document.getElementById('form-fallback').classList.remove('hidden');
+        showToast('Дані підготовлено! Скопіюйте текст нижче.');
+      });
+
+      document.getElementById('copy-appeal-btn').addEventListener('click', () => {
+        copyText(document.getElementById('form-preview-text').textContent);
+      });
+    })();
+  </script>
+</body>
+</html>
