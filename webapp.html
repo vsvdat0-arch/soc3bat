@@ -238,6 +238,9 @@
         <button type="button" data-tab="cabinet" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
           <span>👤</span><span>Кабінет</span>
         </button>
+        <button type="button" data-tab="chat" id="nav-chat-tab" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span>💬</span><span>Чат</span>
+        </button>
         <button type="button" data-tab="admin" id="nav-admin-tab" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold items-center gap-1.5" style="display: none; border-color: rgba(234, 179, 8, 0.45); color: #fde047;">
           <span>👮‍♂️</span><span>Адмін</span>
         </button>
@@ -737,6 +740,23 @@
 
         </div>
     </section>
+    <!-- TAB CHAT -->
+    <section id="tab-chat" class="tab-panel hidden space-y-4">
+      <div class="glass-card p-4 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <h2 class="text-base font-extrabold">💬 Спільний чат побратимів</h2>
+          <button type="button" id="chat-refresh-btn" class="text-xs px-3 py-1.5 rounded-xl font-semibold" style="background: rgba(255,255,255,0.08);">🔄 Оновити</button>
+        </div>
+        <div id="chat-messages" class="space-y-2 max-h-80 overflow-y-auto p-3 rounded-xl text-xs" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
+          <div style="color: var(--text-muted);">Натисніть «🔄 Оновити» або відкрийте через кнопку в боті...</div>
+        </div>
+        <div class="flex gap-2">
+          <input id="chat-input" type="text" class="input-field text-xs" placeholder="Напишіть повідомлення..." />
+          <button type="button" id="chat-send-btn" class="btn-dshv px-4 py-2 rounded-xl text-xs font-bold shrink-0">Надіслати</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast notification -->
@@ -1244,6 +1264,66 @@
         }
       }
 
+
+
+      async function loadChat() {
+        const box = document.getElementById('chat-messages');
+        if (!box) return;
+        try {
+          const d = await apiReq('/api/chat');
+          box.innerHTML = '';
+          const msgs = d.messages || [];
+          if (!msgs.length) {
+            box.innerHTML = '<div style="color: var(--text-muted);">Повідомлень поки немає. Напишіть перше!</div>';
+            return;
+          }
+          msgs.forEach((m) => {
+            const isMine = Number(m.uid) === Number(d.uid);
+            const row = document.createElement('div');
+            row.className = 'p-2.5 rounded-xl ' + (isMine ? 'ml-6' : 'mr-6');
+            row.style.background = isMine ? 'rgba(185, 28, 28, 0.25)' : 'rgba(255, 255, 255, 0.08)';
+            row.style.border = '1px solid ' + (isMine ? 'rgba(239, 68, 68, 0.35)' : 'rgba(255, 255, 255, 0.12)');
+            const top = document.createElement('div');
+            top.className = 'flex items-center justify-between gap-2 mb-0.5';
+            const who = document.createElement('span');
+            who.className = 'text-[10px] font-bold';
+            who.style.color = isMine ? '#fca5a5' : '#fde047';
+            who.textContent = m.author || 'Побратим';
+            top.appendChild(who);
+            if (d.is_admin && m.id) {
+              const del = document.createElement('button');
+              del.type = 'button';
+              del.className = 'text-[10px] text-red-300 opacity-75 hover:opacity-100';
+              del.textContent = '🗑';
+              del.onclick = async () => { await apiReq('/api/chat', 'POST', {action: 'delete', id: m.id}); loadChat(); };
+              top.appendChild(del);
+            }
+            const txt = document.createElement('div');
+            txt.className = 'text-slate-100 whitespace-pre-wrap';
+            txt.textContent = m.text || '';
+            row.appendChild(top);
+            row.appendChild(txt);
+            box.appendChild(row);
+          });
+          box.scrollTop = box.scrollHeight;
+        } catch (e) {
+          box.innerHTML = '<div class="text-red-400"></div>';
+          box.firstChild.textContent = e.message;
+        }
+      }
+      document.getElementById('nav-chat-tab').addEventListener('click', () => { loadChat(); });
+      document.getElementById('chat-refresh-btn').addEventListener('click', () => { haptic(); loadChat(); });
+      document.getElementById('chat-send-btn').addEventListener('click', async () => {
+        haptic();
+        const inp = document.getElementById('chat-input');
+        const txt = (inp.value || '').trim();
+        if (!txt) return;
+        try {
+          await apiReq('/api/chat', 'POST', {text: txt});
+          inp.value = '';
+          loadChat();
+        } catch (e) { showToast(e.message, true); }
+      });
 
       let adminRosterCache = [];
       function renderAdminRoster() {
