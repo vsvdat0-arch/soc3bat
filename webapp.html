@@ -716,7 +716,6 @@
             <div id="cab-roster-add-form" class="hidden space-y-2 p-3 rounded-xl" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
               <input id="r-fullname" type="text" class="input-field text-xs" placeholder="ПІБ військовослужбовця" />
               <input id="r-phone" type="tel" class="input-field text-xs" placeholder="Контактний телефон (+380...)" />
-              <input id="r-place" type="text" class="input-field text-xs" placeholder="Місце перебування (напр. Шпиталь, Дніпро)" />
               <select id="r-injury" class="input-field text-xs">
                 <option value="Тяжка">🔴 Тяжка травма</option>
                 <option value="Середня">🟡 Середня травма</option>
@@ -725,7 +724,7 @@
               <button type="button" id="cab-roster-save" class="btn-gold w-full py-2 rounded-xl text-xs">💾 Зберегти в реєстр</button>
             </div>
             <div class="flex gap-2">
-              <input id="cab-roster-search" type="search" class="input-field text-xs py-1.5" placeholder="🔍 Пошук за ПІБ, телефоном, місцем..." />
+              <input id="cab-roster-search" type="search" class="input-field text-xs py-1.5" placeholder="🔍 Пошук за ПІБ або телефоном..." />
               <select id="cab-roster-filter" class="input-field text-xs py-1.5" style="width: auto;">
                 <option value="">Усі</option>
                 <option value="Тяжка">🔴 Тяжкі</option>
@@ -1256,7 +1255,7 @@
         const list = adminRosterCache.filter((r) => {
           if (flt && (r.injury_level || '') !== flt) return false;
           if (!q) return true;
-          return ((r.full_name || '') + ' ' + (r.phone || '') + ' ' + (r.stay_place || '')).toLowerCase().includes(q);
+          return ((r.full_name || '') + ' ' + (r.phone || '')).toLowerCase().includes(q);
         });
         if (!list.length) {
           box.innerHTML = '<div style="color: var(--text-muted);">Записів не знайдено.</div>';
@@ -1279,7 +1278,7 @@
           top.appendChild(bg);
           const meta = document.createElement('div');
           meta.style.color = 'var(--text-muted)';
-          meta.textContent = '📞 ' + (r.phone || '—') + ' · 📍 ' + (r.stay_place || 'не вказано');
+          meta.textContent = '📞 ' + (r.phone || '—');
           const acts = document.createElement('div');
           acts.className = 'flex flex-wrap gap-1.5 pt-1';
           if (r.uid) {
@@ -1364,12 +1363,10 @@
             action: 'save',
             full_name: document.getElementById('r-fullname').value,
             phone: document.getElementById('r-phone').value,
-            stay_place: document.getElementById('r-place').value,
             injury_level: document.getElementById('r-injury').value
           });
           document.getElementById('r-fullname').value = '';
           document.getElementById('r-phone').value = '';
-          document.getElementById('r-place').value = '';
           document.getElementById('cab-roster-add-form').classList.add('hidden');
           showToast('Додано в реєстр!');
           loadCabinet();
