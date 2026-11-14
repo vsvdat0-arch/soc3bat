@@ -345,6 +345,34 @@
             <div id="cab-admin-vlk" class="space-y-1.5 text-xs"></div>
           </div>
           <div id="cab-admin-needs" class="space-y-2 text-xs"></div>
+          <div id="cab-admin-roster-wrap" class="space-y-2.5 pt-2 border-t" style="border-color: var(--border-subtle);">
+            <div class="flex items-center justify-between gap-2">
+              <div class="text-xs font-bold" style="color: #fde047;">🪖 Поранені на супроводі</div>
+              <button type="button" id="cab-roster-toggle-add" class="text-[11px] font-bold px-2.5 py-1 rounded-lg btn-dshv">➕ Додати</button>
+            </div>
+            <div id="cab-roster-add-form" class="hidden space-y-2 p-3 rounded-xl" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
+              <input id="r-fullname" type="text" class="input-field text-xs" placeholder="ПІБ військовослужбовця" />
+              <input id="r-phone" type="tel" class="input-field text-xs" placeholder="Контактний телефон (+380...)" />
+              <input id="r-place" type="text" class="input-field text-xs" placeholder="Місце перебування (напр. Шпиталь, Дніпро)" />
+              <select id="r-injury" class="input-field text-xs">
+                <option value="Тяжка">🔴 Тяжка травма</option>
+                <option value="Середня">🟡 Середня травма</option>
+                <option value="Легка">🟢 Легка травма</option>
+              </select>
+              <button type="button" id="cab-roster-save" class="btn-gold w-full py-2 rounded-xl text-xs">💾 Зберегти в реєстр</button>
+            </div>
+            <div class="flex gap-2">
+              <input id="cab-roster-search" type="search" class="input-field text-xs py-1.5" placeholder="🔍 Пошук за ПІБ, телефоном, місцем..." />
+              <select id="cab-roster-filter" class="input-field text-xs py-1.5" style="width: auto;">
+                <option value="">Усі</option>
+                <option value="Тяжка">🔴 Тяжкі</option>
+                <option value="Середня">🟡 Середні</option>
+                <option value="Легка">🟢 Легкі</option>
+              </select>
+            </div>
+            <div id="cab-admin-roster" class="space-y-2 text-xs"></div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -982,7 +1010,13 @@
       async function apiReq(path, method, body) {
         const base = getApiBase();
         if (!base) throw new Error('API URL не налаштовано');
-        const initData = (tg && tg.initData) ? tg.initData : '';
+        let initData = (tg && tg.initData) ? tg.initData : '';
+        if (!initData) {
+          try {
+            const hp = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+            initData = hp.get('tgWebAppData') || '';
+          } catch (e) {}
+        }
         if (!initData) throw new Error('Відкрийте міні-додаток саме через кнопку в Telegram-боті');
         const res = await fetch(base + path, {
           method: method || 'GET',
@@ -1045,7 +1079,7 @@
             docsEl.innerHTML = '<div style="color: var(--text-muted);">Файлів ще немає. Завантажуйте документи в чаті бота («📁 Документи»).</div>';
           } else {
             const base = getApiBase();
-            const initQ = encodeURIComponent((tg && tg.initData) ? tg.initData : '');
+            const initQ = encodeURIComponent((tg && tg.initData) ? tg.initData : (new URLSearchParams((window.location.hash || '').replace(/^#/, '')).get('tgWebAppData') || ''));
             d.documents.forEach((doc) => {
               const row = document.createElement('div');
               row.className = 'p-2.5 rounded-xl flex items-center justify-between gap-2';
@@ -1073,6 +1107,8 @@
           const vlkAlertsEl = document.getElementById('cab-admin-vlk');
           if (d.is_admin) {
             admBox.classList.remove('hidden');
+            adminRosterCache = d.admin_roster || [];
+            renderAdminRoster();
             const alerts = d.admin_vlk_alerts || [];
             if (alerts.length) {
               vlkWrap.classList.remove('hidden');
@@ -1167,6 +1203,137 @@
           stEl.style.color = '#fde047';
         }
       }
+
+
+      let adminRosterCache = [];
+      function renderAdminRoster() {
+        const box = document.getElementById('cab-admin-roster');
+        if (!box) return;
+        const q = (document.getElementById('cab-roster-search').value || '').trim().toLowerCase();
+        const flt = document.getElementById('cab-roster-filter').value;
+        box.innerHTML = '';
+        const list = adminRosterCache.filter((r) => {
+          if (flt && (r.injury_level || '') !== flt) return false;
+          if (!q) return true;
+          return ((r.full_name || '') + ' ' + (r.phone || '') + ' ' + (r.stay_place || '')).toLowerCase().includes(q);
+        });
+        if (!list.length) {
+          box.innerHTML = '<div style="color: var(--text-muted);">Записів не знайдено.</div>';
+          return;
+        }
+        list.forEach((r) => {
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-xl space-y-1.5';
+          card.style.background = 'rgba(10,12,17,0.75)';
+          card.style.border = '1px solid var(--border-subtle)';
+          const il = r.injury_level || ''; const badge = (il === 'Тяжка' || il === 'Важке') ? '🔴 ' + il : (il === 'Середня' ? '🟡 Середня' : ((il === 'Легка' || il === 'Легке') ? '🟢 ' + il : '⚪ Не вказано'));
+          const top = document.createElement('div');
+          top.className = 'flex items-center justify-between gap-2 font-bold text-slate-100';
+          const nm = document.createElement('span');
+          nm.textContent = r.full_name || '—';
+          const bg = document.createElement('span');
+          bg.className = 'text-[11px] shrink-0';
+          bg.textContent = badge;
+          top.appendChild(nm);
+          top.appendChild(bg);
+          const meta = document.createElement('div');
+          meta.style.color = 'var(--text-muted)';
+          meta.textContent = '📞 ' + (r.phone || '—') + ' · 📍 ' + (r.stay_place || 'не вказано');
+          const acts = document.createElement('div');
+          acts.className = 'flex flex-wrap gap-1.5 pt-1';
+          if (r.uid) {
+            const bMsg = document.createElement('button');
+            bMsg.type = 'button';
+            bMsg.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+            bMsg.style.background = 'rgba(37,99,235,0.28)';
+            bMsg.style.color = '#bfdbfe';
+            bMsg.textContent = '💬 Написати в бот';
+            bMsg.onclick = () => {
+              let rbox = card.querySelector('.r-reply-box');
+              if (rbox) { rbox.classList.toggle('hidden'); return; }
+              rbox = document.createElement('div');
+              rbox.className = 'r-reply-box flex gap-2 pt-1';
+              const inp = document.createElement('input');
+              inp.type = 'text';
+              inp.className = 'input-field text-xs py-1.5';
+              inp.placeholder = 'Повідомлення в Telegram...';
+              const snd = document.createElement('button');
+              snd.type = 'button';
+              snd.className = 'btn-dshv px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0';
+              snd.textContent = 'Надіслати';
+              snd.onclick = async () => {
+                const txt = inp.value.trim();
+                if (!txt) return;
+                await apiReq('/api/admin/reply', 'POST', {target_uid: r.uid, text: txt});
+                inp.value = '';
+                rbox.classList.add('hidden');
+                showToast('Надіслано в Telegram!');
+              };
+              rbox.appendChild(inp);
+              rbox.appendChild(snd);
+              card.appendChild(rbox);
+            };
+            acts.appendChild(bMsg);
+          }
+          if (r.phone) {
+            const cleanPh = r.phone.replace(/[^\d+]/g, '');
+            const aCall = document.createElement('a');
+            aCall.href = 'tel:' + cleanPh;
+            aCall.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+            aCall.style.background = 'rgba(22,163,74,0.25)';
+            aCall.style.color = '#86efac';
+            aCall.textContent = '📞 Подзвонити';
+            acts.appendChild(aCall);
+            const aTg = document.createElement('a');
+            aTg.href = 'https://t.me/' + cleanPh;
+            aTg.target = '_blank';
+            aTg.rel = 'noopener noreferrer';
+            aTg.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+            aTg.style.background = 'rgba(255,255,255,0.08)';
+            aTg.style.color = '#e2e8f0';
+            aTg.textContent = '✈️ Telegram';
+            acts.appendChild(aTg);
+          }
+          if (r.id) {
+            const bDel = document.createElement('button');
+            bDel.type = 'button';
+            bDel.className = 'px-2.5 py-1 rounded-lg font-bold text-[11px]';
+            bDel.style.background = 'rgba(220,38,38,0.25)';
+            bDel.style.color = '#fecaca';
+            bDel.textContent = '🗑';
+            bDel.onclick = async () => { await apiReq('/api/admin/roster', 'POST', {action: 'delete', id: r.id}); loadCabinet(); };
+            acts.appendChild(bDel);
+          }
+          card.appendChild(top);
+          card.appendChild(meta);
+          card.appendChild(acts);
+          box.appendChild(card);
+        });
+      }
+      document.getElementById('cab-roster-toggle-add').addEventListener('click', () => {
+        haptic();
+        document.getElementById('cab-roster-add-form').classList.toggle('hidden');
+      });
+      document.getElementById('cab-roster-search').addEventListener('input', renderAdminRoster);
+      document.getElementById('cab-roster-filter').addEventListener('change', renderAdminRoster);
+      document.getElementById('cab-roster-save').addEventListener('click', async () => {
+        haptic();
+        try {
+          await apiReq('/api/admin/roster', 'POST', {
+            action: 'save',
+            full_name: document.getElementById('r-fullname').value,
+            phone: document.getElementById('r-phone').value,
+            stay_place: document.getElementById('r-place').value,
+            injury_level: document.getElementById('r-injury').value
+          });
+          document.getElementById('r-fullname').value = '';
+          document.getElementById('r-phone').value = '';
+          document.getElementById('r-place').value = '';
+          document.getElementById('cab-roster-add-form').classList.add('hidden');
+          showToast('Додано в реєстр!');
+          loadCabinet();
+        } catch (e) { showToast(e.message, true); }
+      });
 
       function buildReportDraft(kind) {
         const fn = document.getElementById('cab-fullname').value.trim() || '[ПІБ]';
