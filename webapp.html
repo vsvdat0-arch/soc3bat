@@ -250,6 +250,9 @@
         <button type="button" data-tab="hotlines" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
           <span>📞</span><span>Контакти</span>
         </button>
+        <button type="button" data-tab="admin" id="nav-admin-tab" class="tab-btn hidden px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5" style="border-color: rgba(234, 179, 8, 0.45); color: #fde047;">
+          <span>👮‍♂️</span><span>Адмін</span>
+        </button>
       </nav>
     </div>
   </header>
@@ -362,46 +365,6 @@
           <div id="cab-docs-list" class="space-y-1.5 text-xs"></div>
         </div>
 
-        <!-- Admin Panel -->
-        <div id="cab-admin-box" class="hidden glass-card p-4 space-y-3" style="border-color: rgba(234, 179, 8, 0.35);">
-          <div class="flex items-center justify-between gap-2">
-            <h3 class="text-sm font-bold" style="color: #fde047;">👮‍♂️ Адмін-панель</h3>
-            <button type="button" id="cab-admin-clear-closed" class="text-[11px] font-bold px-2.5 py-1 rounded-lg" style="background: rgba(220, 38, 38, 0.25); color: #fecaca;">🧹 Очистити вирішені</button>
-          </div>
-          <div id="cab-admin-vlk-wrap" class="hidden space-y-1.5">
-            <div class="text-xs font-bold text-red-400">⚠️ Червоний список ВЛК (≤ 14 діб / прострочено):</div>
-            <div id="cab-admin-vlk" class="space-y-1.5 text-xs"></div>
-          </div>
-          <div id="cab-admin-needs" class="space-y-2 text-xs"></div>
-          <div id="cab-admin-roster-wrap" class="space-y-2.5 pt-2 border-t" style="border-color: var(--border-subtle);">
-            <div class="flex items-center justify-between gap-2">
-              <div class="text-xs font-bold" style="color: #fde047;">🪖 Поранені на супроводі</div>
-              <button type="button" id="cab-roster-toggle-add" class="text-[11px] font-bold px-2.5 py-1 rounded-lg btn-dshv">➕ Додати</button>
-            </div>
-            <div id="cab-roster-add-form" class="hidden space-y-2 p-3 rounded-xl" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
-              <input id="r-fullname" type="text" class="input-field text-xs" placeholder="ПІБ військовослужбовця" />
-              <input id="r-phone" type="tel" class="input-field text-xs" placeholder="Контактний телефон (+380...)" />
-              <input id="r-place" type="text" class="input-field text-xs" placeholder="Місце перебування (напр. Шпиталь, Дніпро)" />
-              <select id="r-injury" class="input-field text-xs">
-                <option value="Тяжка">🔴 Тяжка травма</option>
-                <option value="Середня">🟡 Середня травма</option>
-                <option value="Легка">🟢 Легка травма</option>
-              </select>
-              <button type="button" id="cab-roster-save" class="btn-gold w-full py-2 rounded-xl text-xs">💾 Зберегти в реєстр</button>
-            </div>
-            <div class="flex gap-2">
-              <input id="cab-roster-search" type="search" class="input-field text-xs py-1.5" placeholder="🔍 Пошук за ПІБ, телефоном, місцем..." />
-              <select id="cab-roster-filter" class="input-field text-xs py-1.5" style="width: auto;">
-                <option value="">Усі</option>
-                <option value="Тяжка">🔴 Тяжкі</option>
-                <option value="Середня">🟡 Середні</option>
-                <option value="Легка">🟢 Легкі</option>
-              </select>
-            </div>
-            <div id="cab-admin-roster" class="space-y-2 text-xs"></div>
-          </div>
-
-        </div>
       </div>
     </section>
 
@@ -730,6 +693,51 @@
       </div>
     </section>
 
+    <!-- TAB ADMIN -->
+    <section id="tab-admin" class="tab-panel hidden space-y-4">
+      <div id="cab-admin-box" class="glass-card p-4 space-y-3" style="border-color: rgba(234, 179, 8, 0.35);">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-bold" style="color: #fde047;">👮‍♂️ Адмін-панель</h3>
+            <button type="button" id="cab-admin-clear-closed" class="text-[11px] font-bold px-2.5 py-1 rounded-lg" style="background: rgba(220, 38, 38, 0.25); color: #fecaca;">🧹 Очистити вирішені</button>
+          </div>
+          <div id="cab-admin-vlk-wrap" class="hidden space-y-1.5">
+            <div class="text-xs font-bold text-red-400">⚠️ Червоний список ВЛК (≤ 14 діб / прострочено):</div>
+            <div id="cab-admin-vlk" class="space-y-1.5 text-xs"></div>
+          </div>
+          <div id="cab-admin-needs" class="space-y-2 text-xs"></div>
+          <details id="cab-admin-roster-wrap" class="space-y-2.5 pt-2 border-t" style="border-color: var(--border-subtle);">
+            <summary class="flex items-center justify-between gap-2 cursor-pointer list-none py-1">
+              <span class="text-xs font-bold" style="color: #fde047;">🪖 Поранені на супроводі <span id="cab-roster-count"></span></span>
+              <span class="text-[11px]" style="color: var(--text-muted);">розгорнути / згорнути ▾</span>
+            </summary>
+            <div class="flex justify-end">
+              <button type="button" id="cab-roster-toggle-add" class="text-[11px] font-bold px-2.5 py-1 rounded-lg btn-dshv">➕ Додати бійця</button>
+            </div>
+            <div id="cab-roster-add-form" class="hidden space-y-2 p-3 rounded-xl" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
+              <input id="r-fullname" type="text" class="input-field text-xs" placeholder="ПІБ військовослужбовця" />
+              <input id="r-phone" type="tel" class="input-field text-xs" placeholder="Контактний телефон (+380...)" />
+              <input id="r-place" type="text" class="input-field text-xs" placeholder="Місце перебування (напр. Шпиталь, Дніпро)" />
+              <select id="r-injury" class="input-field text-xs">
+                <option value="Тяжка">🔴 Тяжка травма</option>
+                <option value="Середня">🟡 Середня травма</option>
+                <option value="Легка">🟢 Легка травма</option>
+              </select>
+              <button type="button" id="cab-roster-save" class="btn-gold w-full py-2 rounded-xl text-xs">💾 Зберегти в реєстр</button>
+            </div>
+            <div class="flex gap-2">
+              <input id="cab-roster-search" type="search" class="input-field text-xs py-1.5" placeholder="🔍 Пошук за ПІБ, телефоном, місцем..." />
+              <select id="cab-roster-filter" class="input-field text-xs py-1.5" style="width: auto;">
+                <option value="">Усі</option>
+                <option value="Тяжка">🔴 Тяжкі</option>
+                <option value="Середня">🟡 Середні</option>
+                <option value="Легка">🟢 Легкі</option>
+              </select>
+            </div>
+            <div id="cab-admin-roster" class="space-y-2 text-xs"></div>
+          </details>
+
+        </div>
+    </section>
   </main>
 
   <!-- Toast notification -->
@@ -1133,9 +1141,13 @@
           const admList = document.getElementById('cab-admin-needs');
           const vlkWrap = document.getElementById('cab-admin-vlk-wrap');
           const vlkAlertsEl = document.getElementById('cab-admin-vlk');
+          const navAdm = document.getElementById('nav-admin-tab');
           if (d.is_admin) {
+            if (navAdm) navAdm.classList.remove('hidden');
             admBox.classList.remove('hidden');
             adminRosterCache = d.admin_roster || [];
+            const rc = document.getElementById('cab-roster-count');
+            if (rc) rc.textContent = '(' + adminRosterCache.length + ')';
             renderAdminRoster();
             const alerts = d.admin_vlk_alerts || [];
             if (alerts.length) {
@@ -1223,6 +1235,7 @@
               admList.appendChild(card);
             });
           } else {
+            if (navAdm) navAdm.classList.add('hidden');
             admBox.classList.add('hidden');
           }
         } catch (err) {
@@ -1396,6 +1409,7 @@
       document.getElementById('cab-copy-report').addEventListener('click', () => { copyText(document.getElementById('cab-report-preview').textContent); });
       document.getElementById('cab-refresh-btn').addEventListener('click', () => { haptic(); loadCabinet(); });
       document.querySelector('[data-tab="cabinet"]').addEventListener('click', () => { loadCabinet(); });
+      document.getElementById('nav-admin-tab').addEventListener('click', () => { loadCabinet(); });
       document.getElementById('cab-save-stay').addEventListener('click', async () => {
         haptic();
         if (!selectedStayStatus) return showToast('Оберіть статус вище', true);
@@ -1457,6 +1471,7 @@
           loadCabinet();
         } catch (e) { showToast(e.message, true); }
       });
+      if (getApiBase() && ((tg && tg.initData) || (window.location.hash || '').includes('tgWebAppData='))) { loadCabinet(); }
     })();
   </script>
 </body>
