@@ -1043,8 +1043,12 @@
         try { localStorage.setItem('suprovid_api_url', paramApi); } catch (e) {}
       }
       function getApiBase() {
-        if (paramApi) return paramApi.replace(/\/+$/, '');
-        try { return (localStorage.getItem('suprovid_api_url') || '').replace(/\/+$/, ''); } catch (e) { return ''; }
+        if (paramApi && !paramApi.includes('trycloudflare.com')) return paramApi.replace(/\/+$/, '');
+        try {
+          const saved = (localStorage.getItem('suprovid_api_url') || '').replace(/\/+$/, '');
+          if (saved && !saved.includes('trycloudflare.com')) return saved;
+        } catch (e) {}
+        return 'https://113-30-190-220.sslip.io';
       }
       let selectedStayStatus = '';
 
