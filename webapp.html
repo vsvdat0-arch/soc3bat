@@ -745,7 +745,10 @@
       <div class="glass-card p-4 space-y-3">
         <div class="flex items-center justify-between gap-2">
           <h2 class="text-base font-extrabold">💬 Спільний чат побратимів</h2>
-          <button type="button" id="chat-refresh-btn" class="text-xs px-3 py-1.5 rounded-xl font-semibold" style="background: rgba(255,255,255,0.08);">🔄 Оновити</button>
+          <div class="flex items-center gap-1.5">
+            <button type="button" id="chat-clear-btn" class="text-xs px-3 py-1.5 rounded-xl font-semibold" style="display: none; background: rgba(220,38,38,0.25); color: #fecaca;">🧹 Очистити</button>
+            <button type="button" id="chat-refresh-btn" class="text-xs px-3 py-1.5 rounded-xl font-semibold" style="background: rgba(255,255,255,0.08);">🔄 Оновити</button>
+          </div>
         </div>
         <div id="chat-messages" class="space-y-2 max-h-80 overflow-y-auto p-3 rounded-xl text-xs" style="background: rgba(10,12,17,0.75); border: 1px solid var(--border-subtle);">
           <div style="color: var(--text-muted);">Натисніть «🔄 Оновити» або відкрийте через кнопку в боті...</div>
@@ -1271,6 +1274,8 @@
         if (!box) return;
         try {
           const d = await apiReq('/api/chat');
+          const cbtn = document.getElementById('chat-clear-btn');
+          if (cbtn) cbtn.style.display = d.is_admin ? 'inline-flex' : 'none';
           box.innerHTML = '';
           const msgs = d.messages || [];
           if (!msgs.length) {
@@ -1313,6 +1318,20 @@
       }
       document.getElementById('nav-chat-tab').addEventListener('click', () => { loadChat(); });
       document.getElementById('chat-refresh-btn').addEventListener('click', () => { haptic(); loadChat(); });
+      let chatClearArmed = false;
+      document.getElementById('chat-clear-btn').addEventListener('click', async (e) => {
+        haptic();
+        const btn = e.currentTarget;
+        if (!chatClearArmed) {
+          chatClearArmed = true;
+          btn.textContent = 'Точно очистити?';
+          setTimeout(() => { chatClearArmed = false; btn.textContent = '🧹 Очистити'; }, 3500);
+          return;
+        }
+        chatClearArmed = false;
+        btn.textContent = '🧹 Очистити';
+        try { await apiReq('/api/chat', 'POST', {action: 'clear'}); showToast('Чат очищено'); loadChat(); } catch (err) { showToast(err.message, true); }
+      });
       document.getElementById('chat-send-btn').addEventListener('click', async () => {
         haptic();
         const inp = document.getElementById('chat-input');
