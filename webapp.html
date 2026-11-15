@@ -321,37 +321,28 @@
           <h3 class="text-sm font-bold flex items-center gap-2">
             <span>⏳</span><span>Мій лічильник ВЛК (120 діб)</span>
           </h3>
-          <div id="cab-vlk-info" class="text-xs" style="color: var(--text-muted);">Дата ВЛК ще не задана.</div>
+          
+          
+        </div>
+
+        <!-- VLK 120-day counter -->
+        <div class="glass-card p-4 space-y-2.5">
+          <h3 class="text-sm font-bold flex items-center gap-2"><span>⏳</span><span>Мій лічильник ВЛК (120 діб)</span></h3>
+          <div id="cab-vlk-info" class="text-xs" style="color: var(--text-muted);">Дата останньої ВЛК не вказана</div>
           <div class="flex gap-2">
-            <input id="cab-vlk-date" type="date" class="input-field text-xs py-2" />
-            <button type="button" id="cab-save-vlk" class="btn-gold px-4 py-2 rounded-xl text-xs shrink-0">Оновити</button>
+            <input id="cab-vlk-date" type="date" class="input-field text-xs" />
+            <button type="button" id="cab-save-vlk" class="btn-dshv px-3.5 py-2 rounded-xl text-xs font-bold shrink-0">Зберегти</button>
           </div>
         </div>
 
-        <!-- Auto Report Draft Generator -->
-        <details class="glass-card p-4 space-y-2.5">
-          <summary class="text-sm font-bold flex items-center justify-between cursor-pointer list-none">
-            <span>📝 Чернетка рапорту (ОГД / МД)</span>
-            <span class="text-xs font-normal" style="color: var(--text-muted);">розгорнути ▾</span>
-          </summary>
-          <div class="flex gap-2">
-            <button type="button" id="cab-gen-ogd" class="btn-dshv flex-1 py-2 rounded-xl text-xs font-bold">Рапорт на ОГД</button>
-            <button type="button" id="cab-gen-md" class="btn-gold flex-1 py-2 rounded-xl text-xs">Рапорт на МД</button>
-          </div>
-          <pre id="cab-report-preview" class="hidden whitespace-pre-wrap text-[11px] p-3 rounded-xl" style="background: rgba(10,12,17,0.85); border: 1px solid var(--border-subtle); color: #e2e8f0;"></pre>
-          <button type="button" id="cab-copy-report" class="hidden w-full py-2 rounded-xl text-xs font-bold" style="background: rgba(255,255,255,0.08);">📋 Скопіювати чернетку</button>
-        </details>
-
         <!-- My Needs -->
-        <div class="glass-card p-4 space-y-3">
-          <h3 class="text-sm font-bold flex items-center gap-2">
-            <span>📌</span><span>Мої потреби та звернення</span>
-          </h3>
+        <div class="glass-card p-4 space-y-2.5">
+          <h3 class="text-sm font-bold flex items-center gap-2"><span>📌</span><span>Мої потреби та звернення</span></h3>
           <div class="flex gap-2">
-            <input id="cab-new-need" type="text" class="input-field text-xs" placeholder="Коротко опишіть нову потребу..." />
-            <button type="button" id="cab-add-need" class="btn-dshv px-4 py-2 rounded-xl text-xs font-bold shrink-0">➕</button>
+            <input id="cab-new-need" type="text" class="input-field text-xs" placeholder="Наприклад: потрібна довідка ф.5 або консультація..." />
+            <button type="button" id="cab-add-need" class="btn-dshv px-3.5 py-2 rounded-xl text-xs font-bold shrink-0">Додати</button>
           </div>
-          <div id="cab-needs-list" class="space-y-2 text-xs"></div>
+          <div id="cab-needs-list" class="space-y-1.5 text-xs"></div>
         </div>
 
         <!-- My Documents -->
@@ -364,20 +355,7 @@
 
       </div>
 
-      <!-- CARD 5: ДОВІДКА №5 ТА КРОКИ СУПРОВОДУ -->
-      <article class="feed-card glass-card p-4 space-y-2.5" data-cats="steps med">
-        <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
-          <span class="px-2 py-0.5 rounded-md" style="background: rgba(234,179,8,0.2); color: #fde047; border: 1px solid rgba(234,179,8,0.35);">ПОКРОКОВО · ОБОВ’ЯЗКОВО</span>
-          <span style="color: var(--text-muted);">3 батальйон · Служба супроводу</span>
-        </div>
-        <h3 class="text-sm font-extrabold text-white">Алгоритм дій після поранення: Довідка №5, ВЛК та зв’язок із частиною</h3>
-        <ol class="list-decimal pl-4 space-y-1 text-xs text-slate-200">
-          <li><b>Повідомте службу супроводу</b> (у вкладці «👤 Кабінет» → «📍 Де я зараз» вкажіть медзаклад і статус).</li>
-          <li><b>Отримайте Довідку про обставини травми (Додаток 5)</b> — без неї ВЛК не зможе встановити зв’язок із захистом Батьківщини.</li>
-          <li><b>Зберігайте всі виписки (ф. 027/о) та постанови ВЛК</b> у розділі «📁 Мої документи в архіві» в Кабінеті — щоб не загубилися при переведеннях.</li>
-          <li><b>Подавайте рапорти через Армія+</b> або скористайтеся шаблоном рапорту на ОГД/МД прямо в Кабінеті.</li>
-        </ol>
-      </article>
+    </section>
 
     <section id="tab-hotlines" class="tab-panel hidden space-y-3">
       <div class="glass-card p-4" style="border-color: rgba(234, 179, 8, 0.22);">
@@ -602,6 +580,22 @@
           <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" data-chk="ubd" class="rounded" /> <span>Посвідчення УБД / витяг з наказу</span></label>
         </div>
       </article>
+
+
+      <!-- CARD 5: ДОВІДКА №5 ТА КРОКИ СУПРОВОДУ -->
+      <article class="feed-card glass-card p-4 space-y-2.5" data-cats="steps med">
+        <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
+          <span class="px-2 py-0.5 rounded-md" style="background: rgba(234,179,8,0.2); color: #fde047; border: 1px solid rgba(234,179,8,0.35);">ПОКРОКОВО · ОБОВ’ЯЗКОВО</span>
+          <span style="color: var(--text-muted);">3 батальйон · Служба супроводу</span>
+        </div>
+        <h3 class="text-sm font-extrabold text-white">Алгоритм дій після поранення: Довідка №5, ВЛК та зв’язок із частиною</h3>
+        <ol class="list-decimal pl-4 space-y-1 text-xs text-slate-200">
+          <li><b>Повідомте службу супроводу</b> (у вкладці «👤 Кабінет» → «📍 Де я зараз» вкажіть медзаклад і статус).</li>
+          <li><b>Отримайте Довідку про обставини травми (Додаток 5)</b> — без неї ВЛК не зможе встановити зв’язок із захистом Батьківщини.</li>
+          <li><b>Зберігайте всі виписки (ф. 027/о) та постанови ВЛК</b> у розділі «📁 Мої документи в архіві» в Кабінеті — щоб не загубилися при переведеннях.</li>
+          <li><b>Подавайте рапорти через Армія+</b> або зверніться до фахівця супроводу в боті.</li>
+        </ol>
+      </article>
     </section>
 
   </main>
@@ -669,7 +663,7 @@
       }
 
       // Main Tabs
-      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabBtns = document.querySelectorAll('nav .tab-btn[data-tab]');
       const tabPanels = document.querySelectorAll('.tab-panel');
       tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -1195,37 +1189,6 @@
         } catch (e) { showToast(e.message, true); }
       });
 
-      function buildReportDraft(kind) {
-        const fn = document.getElementById('cab-fullname').value.trim() || '[ПІБ]';
-        const un = document.getElementById('cab-unit').value.trim() || '[Підрозділ]';
-        const ph = document.getElementById('cab-phone').value.trim() || '[Телефон]';
-        const txt = kind === 'ogd'
-          ? `Командиру військової частини А4350
-
-РАПОРТ
-Прошу розглянути питання щодо призначення та виплати мені, ${fn} (${un}, тел. ${ph}), одноразової грошової допомоги у зв’язку з ушкодженням здоров’я під час захисту Батьківщини.
-
-Додатки: копії паспорта, РНОКПП, Довідки № 5, постанови ВЛК, витягу ЕКОПФО, довідки IBAN.
-
-Дата: ${new Date().toLocaleDateString('uk-UA')}`
-          : `Командиру військової частини А4350
-
-РАПОРТ
-Прошу виплатити мені, ${fn} (${un}, тел. ${ph}), матеріальну допомогу на вирішення соціально-побутових питань у зв’язку з пораненням / лікуванням.
-
-Додатки: копії медичних документів / виписок.
-
-Дата: ${new Date().toLocaleDateString('uk-UA')}`;
-        const pre = document.getElementById('cab-report-preview');
-        const cpy = document.getElementById('cab-copy-report');
-        pre.textContent = txt;
-        pre.classList.remove('hidden');
-        cpy.classList.remove('hidden');
-      }
-
-      document.getElementById('cab-gen-ogd').addEventListener('click', () => { haptic(); buildReportDraft('ogd'); });
-      document.getElementById('cab-gen-md').addEventListener('click', () => { haptic(); buildReportDraft('md'); });
-      document.getElementById('cab-copy-report').addEventListener('click', () => { copyText(document.getElementById('cab-report-preview').textContent); });
       document.getElementById('cab-refresh-btn').addEventListener('click', () => { haptic(); loadCabinet(); });
       document.querySelector('[data-tab="cabinet"]').addEventListener('click', () => { loadCabinet(); });
       document.getElementById('nav-admin-tab').addEventListener('click', () => { loadCabinet(); });
